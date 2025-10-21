@@ -1,0 +1,157 @@
+[
+   {
+      "name": "titanium",
+      "symbol": "Ti",
+      "K": 4966
+   },
+   {
+      "name": "vanadium",
+      "symbol": "V",
+      "K": 5465
+   },
+   {
+      "name": "chromium",
+      "symbol": "Cr",
+      "K": 5989
+   },
+   {
+      "name": "manganese",
+      "symbol": "Mn",
+      "K": 6539
+   },
+   {
+      "name": "iron",
+      "symbol": "Fe",
+      "K": 7112
+   },
+   {
+      "name": "cobalt",
+      "symbol": "Co",
+      "K": 7709
+   },
+   {
+      "name": "nickel",
+      "symbol": "Ni",
+      "K": 8333
+   },
+   {
+      "name": "copper",
+      "symbol": "Cu",
+      "K": 8979
+   },
+   {
+      "name": "zinc",
+      "symbol": "Zn",
+      "K": 9659
+   },
+   {
+      "name": "gallium",
+      "symbol": "Ga",
+      "K": 10367
+   },
+   {
+      "name": "germanium",
+      "symbol": "Ge",
+      "K": 11103
+   },
+   {
+      "name": "arsenic",
+      "symbol": "As",
+      "K": 11867
+   },
+   {
+      "name": "selenium",
+      "symbol": "Se",
+      "K": 12658
+   },
+   {
+      "name": "bromine",
+      "symbol": "Br",
+      "K": 13474
+   },
+   {
+      "name": "krypton",
+      "symbol": "Kr",
+      "K": 14326
+   },
+   {
+      "name": "rubidium",
+      "symbol": "Rb",
+      "K": 15200
+   },
+   {
+      "name": "strontium",
+      "symbol": "Sr",
+      "K": 16105
+   },
+   {
+      "name": "yttrium",
+      "symbol": "Y",
+      "K": 17038
+   },
+   {
+      "name": "zirconium",
+      "symbol": "Zr",
+      "K": 17998
+   },
+   {
+      "name": "niobium",
+      "symbol": "Nb",
+      "K": 18986
+   },
+   {
+      "name": "molybdenum",
+      "symbol": "Mo",
+      "K": 20000
+   },
+   {
+      "name": "technetium",
+      "symbol": "Tc",
+      "K": 21044
+   },
+   {
+      "name": "ruthenium",
+      "symbol": "Ru",
+      "K": 22117
+   },
+   {
+      "name": "rhodium",
+      "symbol": "Rh",
+      "K": 23220
+   },
+   {
+      "name": "palladium",
+      "symbol": "Pd",
+      "K": 24350
+   },
+   {
+      "name": "silver",
+      "symbol": "Ag",
+      "K": 25514
+   },
+   {
+      "name": "cadmium",
+      "symbol": "Cd",
+      "K": 26711
+   },
+   {
+      "name": "indium",
+      "symbol": "In",
+      "K": 27940
+   },
+   {
+      "name": "tin",
+      "symbol": "Sn",
+      "K": 29200
+   },
+   {
+      "name": "antimony",
+      "symbol": "Sb",
+      "K": 30491
+   },
+   {
+      "name": "tellurium",
+      "symbol": "Te",
+      "K": 31814
+   }
+]

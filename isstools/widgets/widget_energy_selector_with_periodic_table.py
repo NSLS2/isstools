@@ -19,7 +19,7 @@ class UIEnergySelectorWithPeriodicTable(*uic.loadUiType(ui_path)):
         if emission:
            json_data = open(pkg_resources.resource_filename('isstools', 'fluorescence_lines.json')).read()
         else:
-            json_data = open(pkg_resources.resource_filename('isstools', 'edges_lines.json')).read()
+            json_data = open(pkg_resources.resource_filename('isstools', 'absorption_edges2.json')).read()
             self.label_edge_line.setText('Line')
 
         self.elements_data = json.loads(json_data)

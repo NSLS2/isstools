@@ -13,7 +13,8 @@ from isstools.dialogs.BasicDialogs import question_message_box, error_message_bo
 from matplotlib.widgets import Cursor
 from isstools.elements.liveplots import NormPlot
 import json
-from isstools.widgets import widget_energy_selector
+# from isstools.widgets import widget_energy_selector
+from isstools.widgets import widget_energy_selector_with_periodic_table
 from isstools.elements.figure_update import update_figure, setup_figure
 # from xas.energy_calibration import validate_calibration, process_calibration
 import xraydb
@@ -132,9 +133,11 @@ class UIBeamlineSetup(*uic.loadUiType(ui_path)):
         self.spinBox_trigger_xs_freq.setValue(trigger_xs_freq)
         self.spinBox_trigger_xs_freq.valueChanged.connect(self.update_trigger_xs_freq)
 
-        self.widget_energy_selector_prepare = widget_energy_selector.UIEnergySelector()
+        # self.widget_energy_selector_prepare = widget_energy_selector.UIEnergySelector()
+        self.widget_energy_selector_prepare = widget_energy_selector_with_periodic_table.UIEnergySelectorWithPeriodicTable(emission=False)
         self.layout_energy_selector_prepare.addWidget(self.widget_energy_selector_prepare)
-        self.widget_energy_selector_calibration = widget_energy_selector.UIEnergySelector()
+        # self.widget_energy_selector_calibration = widget_energy_selector.UIEnergySelector()
+        self.widget_energy_selector_calibration = widget_energy_selector_with_periodic_table.UIEnergySelectorWithPeriodicTable(emission=False)
         self.layout_energy_selector_calibration.addWidget(self.widget_energy_selector_calibration)
 
         self.liveplot_kwargs = {}
