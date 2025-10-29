@@ -69,6 +69,9 @@ class UIUserManager(*uic.loadUiType(ui_path)):
         self.pushButton_archive_samples.clicked.connect(self.archive_sample)
         self.pushButton_restore_samples.clicked.connect(self.restore_sample)
 
+        self.pushButton_archive_scans.clicked.connect(self.archive_scans)
+        self.pushButton_restore_scans.clicked.connect(self.restore_scans)
+
         self.pushButton_add_metadata_key.clicked.connect(self.add_metadata_key)
         self.pushButton_remove_metadata_key.clicked.connect(self.remove_metadata_key)
 
@@ -134,6 +137,22 @@ class UIUserManager(*uic.loadUiType(ui_path)):
         index_list = [qindex.row() for qindex in self.listWidget_samples_archived.selectedIndexes()]
         # for index in index_list:
         self.sample_manager.restore_at_index(index_list)
+
+    def archive_scans(self):
+        # for item in self.listWidget_samples.selectedItems():
+        #     indx = self.sample_manager.uid_to_sample_index(item.toolTip())
+        #     self.sample_manager.archive_at_index(indx)
+        index_list = [qindex.row() for qindex in self.listWidget_scans.selectedIndexes()]
+        # for index in index_list:
+        # self.sample_manager.archive_at_index(index_list)
+
+    def restore_scans(self):
+        # for item in self.listWidget_samples_archived.selectedItems():
+        #     indx = self.sample_manager.uid_to_sample_index(item.toolTip())
+        #     self.sample_manager.restore_at_index(indx)
+        index_list = [qindex.row() for qindex in self.listWidget_scans_archived.selectedIndexes()]
+        # for index in index_list:
+        # self.sample_manager.restore_at_index(index_list)
 
     def update_scan_list(self):
         self.listWidget_scans.clear()
