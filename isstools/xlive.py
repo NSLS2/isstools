@@ -333,6 +333,7 @@ class XliveGui(*uic.loadUiType(ui_path)):
             self.widget_xia_manager = widget_xia_manager.UIXIAManager(service_plan_funcs=service_plan_funcs,
                                                                       ge_detector=ge_detector,
                                                                       RE=RE,
+                                                                      parent=self,
                                                                       )
             self.layout_xia_manager.addWidget(self.widget_xia_manager)
 

@@ -61,14 +61,14 @@ institution</string>
    <widget class="QPushButton" name="pushButton_archive_samples">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>229</x>
       <y>580</y>
-      <width>100</width>
+      <width>151</width>
       <height>36</height>
      </rect>
     </property>
     <property name="text">
-     <string>Archive</string>
+     <string>Archive Samples</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_restore_samples">
@@ -77,27 +77,27 @@ institution</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>249</x>
       <y>770</y>
-      <width>100</width>
+      <width>131</width>
       <height>36</height>
      </rect>
     </property>
     <property name="text">
-     <string>Restore</string>
+     <string>Restore Samples</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox_show_archived_samples">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>590</y>
-      <width>141</width>
+      <y>580</y>
+      <width>191</width>
       <height>26</height>
      </rect>
     </property>
     <property name="text">
-     <string>Show archive</string>
+     <string>Show archive samples</string>
     </property>
    </widget>
    <widget class="QListWidget" name="listWidget_samples_archived">
@@ -322,6 +322,64 @@ sample</string>
     </property>
     <property name="selectionMode">
      <enum>QAbstractItemView::ExtendedSelection</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_archive_scans">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>580</y>
+      <width>111</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Archive Scans</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_show_archived_scans">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>580</y>
+      <width>171</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show archive scans</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget_scans_archived">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>630</y>
+      <width>361</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::ExtendedSelection</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_restore_scans">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>249</x>
+      <y>770</y>
+      <width>121</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Restore Scans</string>
     </property>
    </widget>
   </widget>
