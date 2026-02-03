@@ -1,6 +1,6 @@
 import pkg_resources
 from qtpy import uic, QtGui, QtCore, QtWidgets
-from qtpy.Qt import Qt
+from qtpy.QtCore import Qt
 
 from qtpy.QtWidgets import QMenu
 from isstools.elements import elements

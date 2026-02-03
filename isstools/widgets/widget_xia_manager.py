@@ -11,7 +11,9 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
-from qtpy.Qt import QSplashScreen, QObject
+from qtpy.QtCore import QObject
+from qtpy.QtWidgets import QSplashScreen
+
 import numpy
 from qtpy import  QtWidgets
 from scipy.optimize import curve_fit

@@ -2,7 +2,7 @@ import sys
 
 import pkg_resources
 from qtpy import uic, QtGui, QtCore, QtWidgets
-from qtpy.Qt import Qt
+from qtpy.QtCore import Qt
 
 from qtpy.QtWidgets import QMenu
 # from xas.trajectory import trajectory_manager

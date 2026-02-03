@@ -7,7 +7,7 @@ from isstools.widgets import widget_energy_selector
 import numpy as np
 import pkg_resources
 from qtpy import uic, QtWidgets, QtCore, QtGui
-from qtpy.Qt import Qt
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QMenu
 
 from isstools.conversions import xray

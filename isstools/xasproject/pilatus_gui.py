@@ -2,7 +2,8 @@ import pkg_resources
 from qtpy import uic, QtCore
 
 from matplotlib.widgets import RectangleSelector, Cursor
-from qtpy.Qt import QSplashScreen, QObject
+from qtpy.QtCore import QObject
+from qtpy.QtWidgets import QSplashScreen
 from qtpy.QtWidgets import QToolTip, QApplication
 from qtpy.QtGui import QPixmap, QCursor
 from isstools.dialogs.BasicDialogs import message_box

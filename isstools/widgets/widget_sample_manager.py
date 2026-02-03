@@ -5,8 +5,9 @@ import pkg_resources
 import math
 
 from qtpy import uic, QtGui, QtCore, QtWidgets
+from qtpy.uic import loadUiType
 from qtpy.QtGui import QPixmap, QCursor
-from qtpy.Qt import QObject, Qt
+from qtpy.QtCore import QObject, Qt
 from qtpy.QtCore import QThread, QSettings
 from qtpy.QtWidgets import QMenu, QToolTip, QHBoxLayout, QWidget
 from isstools.elements.widget_motors import UIWidgetMotors, UIWidgetMotorsWithSlider
@@ -36,7 +37,7 @@ def print_to_gui(msg, tag='', add_timestamp=False, ntabs=0, stdout_alt=sys.stdou
     except NameError:
         stdout = stdout_alt
 
-    msg = '\t'*ntabs + msg
+    msg = '\t'*ntabs + msg/nsls2/data3/iss/shared/config/repos/isstools/isstools/widgets/widget_sample_manager.py
     if add_timestamp:
         msg = f'({time_now_str()}) {msg}'
     if tag:
@@ -99,7 +100,7 @@ sample_position_widget_dict = {
 
 
 
-class UISampleManager(*uic.loadUiType(ui_path)):
+class UISampleManager(*loadUiType(ui_path)):
     # sample_list_changed_signal = QtCore.Signal()
 
     def __init__(self,

@@ -11,7 +11,8 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
-from qtpy.Qt import QSplashScreen, QObject
+from qtpy.QtCore import QObject
+from qtpy.QtWidgets import QSplashScreen
 import numpy
 
 from isstools.dialogs.BasicDialogs import question_message_box, error_message_box, message_box

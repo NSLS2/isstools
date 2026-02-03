@@ -1,7 +1,7 @@
 import pkg_resources
 from qtpy import uic, QtWidgets
 from qtpy.QtCore import QThread, QSettings
-from qtpy.Qt import  QObject
+from qtpy.QtCore import  QObject
 from bluesky.callbacks import LivePlot
 from bluesky.callbacks.mpl_plotting import LiveScatter
 import bluesky.plan_stubs as bps

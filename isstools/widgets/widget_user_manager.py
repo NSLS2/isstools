@@ -10,7 +10,7 @@ import uuid
 
 from qtpy import uic, QtGui, QtCore, QtWidgets
 from qtpy.QtGui import QPixmap, QCursor, QStandardItem
-from qtpy.Qt import QObject, Qt
+from qtpy.QtCore import QObject, Qt
 from qtpy.QtCore import QThread, QSettings
 from qtpy.QtWidgets import QMenu, QToolTip, QHBoxLayout, QWidget, QListWidgetItem
 from isstools.elements.widget_motors import UIWidgetMotors, UIWidgetMotorsWithSlider
