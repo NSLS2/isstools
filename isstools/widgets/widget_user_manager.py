@@ -428,7 +428,7 @@ class UIUserManager(*uic.loadUiType(ui_path)):
             f' <p> Dear {PI},</p> <p>You can download the results of your experiment from JupyterHub by following the steps below: </p>'
             f'<p> 1. Go to https://jupyter.nsls2.bnl.gov and log in using your BNL credentials. </p>'
             f'<p> 2. Click on "Start My Server" to launch a new server or relaunch an already active server. </p>'
-            f'<p> 3. In the "Server Options" window, select "Scientific Python" as the job profile, then click "Start".</p>'
+            f'<p> 3. In the "Server Options" window, select "Pluto Cluster" as the job profile, then click "Start".</p>'
             f'<p> 4. In the File menu, select "Open from Path..." </p>'
             f'<p> 5. Copy and paste the following path (without quotation marks): "{working_directory}" </p>'
             f'<p> 6. Right-click on the zip file named {zip_id_file} and download it to your PC. </p> '

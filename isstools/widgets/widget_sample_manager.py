@@ -109,8 +109,8 @@ class UISampleManager(*uic.loadUiType(ui_path)):
                  sample_manager=None,
                  plan_processor=None,
                  parent=None,
-                 cam1_url='http://10.66.59.30:8083/FfmStream1.jpg',
-                 cam2_url='http://10.66.59.30:8082/FfmStream1.jpg',
+                 cam1_url='http://10.66.59.30:8731/FfmStream1.jpg', #8083 old ports
+                 cam2_url='http://10.66.59.30:8732/FfmStream1.jpg', #8084 old ports
                  detached=False,
                  *args, **kwargs):
 
@@ -223,8 +223,8 @@ class UISampleManager(*uic.loadUiType(ui_path)):
                                                sample_manager=self.sample_manager,
                                                plan_processor=self.plan_processor,
                                                parent=self,
-                                               cam1_url='http://10.66.59.30:8083/FfmStream1.jpg',
-                                               cam2_url='http://10.66.59.30:8082/FfmStream1.jpg',
+                                               cam1_url='http://10.66.59.30:8731/FfmStream1.jpg', #8083 old ports
+                                               cam2_url='http://10.66.59.30:8732/FfmStream1.jpg', #8082 old ports
                                                detached=True)
             self.detached_ui.setWindowTitle('Sample Manager - XLive @ISS/08-ID NSLS-II')
             self.detached_ui.push_detach_tab.setEnabled(False)

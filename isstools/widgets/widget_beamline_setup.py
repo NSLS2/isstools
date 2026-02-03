@@ -340,29 +340,32 @@ class UIBeamlineSetup(*uic.loadUiType(ui_path)):
 
 
     def bender_scan(self):
-        energy = float(self.widget_energy_selector_calibration.edit_E0.text())
-        element, edge, energy = find_correct_foil(energy=energy)
-        if element:
-            if element != self.widget_energy_selector_calibration.comboBox_element.currentText():
-                ret = question_message_box(self, 'Warning',
-                                           f"Element is not available as a calibration foil. {element} "
-                                           f"foil, {edge} edge will be used. Proceed?")
-                if not ret:
-                    return
-
-            ret = question_message_box(self, 'Warning',
-                                       'For best results make sure that there is no sample in the beam')
-            if ret:
-                plan_name = 'bender_scan_plan_bundle'
-                plan_kwargs = {'element' : element, 'edge' : edge}
-                plan_gui_services = ['error_message_box']
-                self.plan_processor.add_plan_and_run_if_idle(plan_name, plan_kwargs, plan_gui_services)
+        print('Bender Scan are not implemented yet')
+        pass
+        return
+        # energy = float(self.widget_energy_selector_calibration.edit_E0.text())
+        # element, edge, energy = find_correct_foil(energy=energy)
+        # if element:
+        #     if element != self.widget_energy_selector_calibration.comboBox_element.currentText():
+        #         ret = question_message_box(self, 'Warning',
+        #                                    f"Element is not available as a calibration foil. {element} "
+        #                                    f"foil, {edge} edge will be used. Proceed?")
+        #         if not ret:
+        #             return
+        #
+        #     ret = question_message_box(self, 'Warning',
+        #                                'For best results make sure that there is no sample in the beam')
+        #     if ret:
+        #         plan_name = 'bender_scan_plan_bundle'
+        #         plan_kwargs = {'element' : element, 'edge' : edge}
+        #         plan_gui_services = ['error_message_box']
+        #         self.plan_processor.add_plan_and_run_if_idle(plan_name, plan_kwargs, plan_gui_services)
 
     def energy_calibration(self):
         energy = float(self.widget_energy_selector_calibration.edit_E0.text())
         element, edge, energy = find_correct_foil(energy=energy)
         if element:
-            if element != self.widget_energy_selector_calibration.comboBox_element.currentText():
+            if element != self.widget_energy_selector_calibration.pushButton_element.text():
                 ret = question_message_box(self, 'Warning', f"Element is not available as a calibration foil. {element} "
                                                              f"foil, {edge} edge will be used. Proceed?")
                 if not ret:
