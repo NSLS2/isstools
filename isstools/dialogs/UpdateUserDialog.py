@@ -1,4 +1,4 @@
-from PyQt5 import uic, QtGui, QtCore
+from qtpy import uic, QtGui, QtCore
 import pkg_resources
 
 ui_path = pkg_resources.resource_filename('isstools', 'dialogs/UpdateUserDialog.ui')

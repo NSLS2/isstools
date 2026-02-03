@@ -2,7 +2,7 @@
 import json
 
 import pkg_resources
-from PyQt5 import uic
+from qtpy import uic
 
 ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_energy_selector.ui')
 ui_path_without_e0 = pkg_resources.resource_filename('isstools', 'ui/ui_energy_selector_without_e0.ui')

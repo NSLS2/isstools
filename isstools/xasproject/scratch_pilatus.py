@@ -1,9 +1,9 @@
 import pkg_resources
-from PyQt5 import uic, QtCore
+from qtpy import uic, QtCore
 from matplotlib.widgets import RectangleSelector, Cursor
-from PyQt5.Qt import QSplashScreen, QObject
-from PyQt5.QtWidgets import QToolTip
-from PyQt5.QtGui import QPixmap, QCursor
+from qtpy.Qt import QSplashScreen, QObject
+from qtpy.QtWidgets import QToolTip
+from qtpy.QtGui import QPixmap, QCursor
 from isstools.dialogs.BasicDialogs import message_box
 from isstools.elements.widget_motors import UIWidgetMotors
 from functools import partial

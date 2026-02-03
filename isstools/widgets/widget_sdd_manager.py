@@ -5,13 +5,13 @@ import bluesky.plan_stubs as bps
 import numpy as np
 import pkg_resources
 
-from PyQt5 import uic,  QtCore
+from qtpy import uic,  QtCore
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
-from PyQt5.Qt import QSplashScreen, QObject
+from qtpy.Qt import QSplashScreen, QObject
 import numpy
 
 from isstools.dialogs.BasicDialogs import question_message_box, error_message_box, message_box

@@ -1,13 +1,13 @@
-from PyQt5 import uic, QtGui, QtCore
+from qtpy import uic, QtGui, QtCore
 import pkg_resources
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QPushButton, QLabel
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QPushButton, QLabel
 
 ui_path = pkg_resources.resource_filename('isstools', 'dialogs/PeriodicTable.ui')
 
-from PyQt5 import uic, QtGui, QtCore
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLabel, QMainWindow
-from PyQt5.QtCore import pyqtSignal
+from qtpy import uic, QtGui, QtCore
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLabel, QMainWindow
+from qtpy.QtCore import Signal
 
 
 
@@ -76,7 +76,7 @@ class ElementLabel(QLabel):
 
 
 class PeriodicTableWidget(*uic.loadUiType(ui_path)):
-    element_selected = pyqtSignal(str)
+    element_selected = Signal(str)
 
     elements = {
         # Main table

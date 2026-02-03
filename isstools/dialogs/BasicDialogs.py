@@ -1,4 +1,4 @@
-from PyQt5 import  QtWidgets
+from qtpy import  QtWidgets
 
 def message_box(title, message):
     messageBox = QtWidgets.QMessageBox()

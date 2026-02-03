@@ -2,7 +2,7 @@
 import json
 
 import pkg_resources
-from PyQt5 import uic
+from qtpy import uic
 from isstools.dialogs import PeriodicTable
 
 ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_energy_selector_with_periodic_table.ui')

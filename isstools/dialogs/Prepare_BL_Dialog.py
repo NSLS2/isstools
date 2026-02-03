@@ -1,4 +1,4 @@
-from PyQt5 import uic, QtGui, QtCore, QtWidgets
+from qtpy import uic, QtGui, QtCore, QtWidgets
 import pkg_resources
 
 ui_path = pkg_resources.resource_filename('isstools', 'dialogs/Prepare_BL_Dialog.ui')

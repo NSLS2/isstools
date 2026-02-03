@@ -1,6 +1,6 @@
 import pkg_resources
 import json
-from PyQt5 import QtWidgets, QtCore, QtGui
+from qtpy import QtWidgets, QtCore, QtGui
 from isstools.dialogs.BasicDialogs import message_box, question_message_box
 import pandas as pd
 

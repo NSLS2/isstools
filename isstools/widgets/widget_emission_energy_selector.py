@@ -1,6 +1,6 @@
 import json
 import pkg_resources
-from PyQt5 import uic
+from qtpy import uic
 from isstools.elements.elements import elements_lines_dict
 from ..elements.elements import get_spectrometer_line_dict
 

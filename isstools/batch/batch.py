@@ -1,7 +1,7 @@
 import pandas as pd
 import collections
 import numpy as np
-from PyQt5 import QtGui
+from qtpy import QtGui
 
 class BatchManager():
 

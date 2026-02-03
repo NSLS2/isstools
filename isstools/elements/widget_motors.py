@@ -1,15 +1,15 @@
 import pkg_resources
-from PyQt5 import uic, QtWidgets
-from PyQt5.QtCore import QThread, QSettings, Qt
-from PyQt5.QtGui import QPixmap, QCursor
-from PyQt5.Qt import  QObject
+from qtpy import uic, QtWidgets
+from qtpy.QtCore import QThread, QSettings, Qt
+from qtpy.QtGui import QPixmap, QCursor
+from qtpy.Qt import  QObject
 from bluesky.callbacks import LivePlot
 from bluesky.callbacks.mpl_plotting import LiveScatter
 import bluesky.plan_stubs as bps
 import bluesky.plans as bp
 import numpy as np
 from functools import partial
-from PyQt5.QtWidgets import QLabel, QPushButton, QLineEdit, QSizePolicy, QSpacerItem, QSlider, QToolTip
+from qtpy.QtWidgets import QLabel, QPushButton, QLineEdit, QSizePolicy, QSpacerItem, QSlider, QToolTip
 
 # from isstools.dialogs import MoveMotorDialog
 # from isstools.dialogs.BasicDialogs import question_message_box

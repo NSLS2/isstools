@@ -8,11 +8,11 @@ from pathlib import Path
 import pkg_resources
 import requests
 
-# PyQt5 modules
-from PyQt5 import uic, QtWidgets, QtCore
-from PyQt5.QtCore import QObject, pyqtSignal, QThread
-from PyQt5.QtWidgets import QListWidgetItem, QAbstractItemView
-from PyQt5.QtGui import QColor
+# qtpy modules
+from qtpy import uic, QtWidgets, QtCore
+from qtpy.QtCore import QObject, Signal, QThread
+from qtpy.QtWidgets import QListWidgetItem, QAbstractItemView
+from qtpy.QtGui import QColor
 
 # External packages (scientific/data handling)
 from databroker.queries import TimeRange, Key
@@ -23,8 +23,8 @@ ROOT_PATH = '/nsls2/data/iss/legacy'
 USER_PATH = 'processed'
 
 class ProposalWorker(QObject):
-    finished = pyqtSignal(list)
-    error = pyqtSignal(str)
+    finished = Signal(list)
+    error = Signal(str)
 
     def __init__(self, year, cycle):
         super().__init__()

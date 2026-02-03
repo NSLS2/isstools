@@ -1,5 +1,5 @@
 
-from PyQt5 import uic, QtGui, QtCore
+from qtpy import uic, QtGui, QtCore
 import pkg_resources
 import requests
 import urllib.request
@@ -12,7 +12,7 @@ from timeit import default_timer as timer
 from isstools.dialogs.BasicDialogs import message_box
 from isscloudtools.initialize import get_slack_service, get_dropbox_service, get_gmail_service
 import bluesky.plan_stubs as bps
-from PyQt5 import uic, QtWidgets
+from qtpy import uic, QtWidgets
 
 from xas.file_io import make_user_dir
 from isscloudtools.slack import *
