@@ -37,7 +37,7 @@ def print_to_gui(msg, tag='', add_timestamp=False, ntabs=0, stdout_alt=sys.stdou
     except NameError:
         stdout = stdout_alt
 
-    msg = '\t'*ntabs + msg/nsls2/data3/iss/shared/config/repos/isstools/isstools/widgets/widget_sample_manager.py
+    msg = '\t'*ntabs + msg
     if add_timestamp:
         msg = f'({time_now_str()}) {msg}'
     if tag:
