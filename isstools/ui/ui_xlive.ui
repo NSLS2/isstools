@@ -227,7 +227,7 @@
      <attribute name="title">
       <string>Re-processing</string>
      </attribute>
-     <widget class="QWidget" name="horizontalLayoutWidget_7">
+     <widget class="QWidget" name="horizontalLayoutWidget_7b">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -359,7 +359,7 @@
     </property>
     <layout class="QHBoxLayout" name="layout_info_shutters"/>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_11">
+   <widget class="QWidget" name="horizontalLayoutWidget_11b">
     <property name="geometry">
      <rect>
       <x>360</x>
