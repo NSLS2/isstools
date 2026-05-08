@@ -360,9 +360,10 @@ class Microscope(QWidget):
         """ Request an updated image asynchronously. """
         self.downloader.downloadData()
 
+
     def updateImageData(self, image):
         """ Triggered when the new image is ready, update the view. """
-        # print(type(image))
+        # print(f"-----------------------------{type(image)}-------------------------------------")
         # self.image_qbytearray = image
         self.image.loadFromData(image, 'JPG')
         self.image = self.image.scaledToWidth(self.scale_width)
