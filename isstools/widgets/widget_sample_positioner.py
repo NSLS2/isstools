@@ -1,6 +1,6 @@
 import json
 import pkg_resources
-from PyQt5 import uic, QtCore
+from qtpy import uic, QtCore
 from isstools.elements.elements import elements_lines_dict
 
 ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_sample_positioner.ui')

@@ -8,18 +8,18 @@ import time as ttime
 import uuid
 
 
-from PyQt5 import uic, QtGui, QtCore, QtWidgets
-from PyQt5.QtGui import QPixmap, QCursor, QStandardItem
-from PyQt5.Qt import QObject, Qt
-from PyQt5.QtCore import QThread, QSettings
-from PyQt5.QtWidgets import QMenu, QToolTip, QHBoxLayout, QWidget, QListWidgetItem
+from qtpy import uic, QtGui, QtCore, QtWidgets
+from qtpy.QtGui import QPixmap, QCursor, QStandardItem
+from qtpy.QtCore import QObject, Qt
+from qtpy.QtCore import QThread, QSettings
+from qtpy.QtWidgets import QMenu, QToolTip, QHBoxLayout, QWidget, QListWidgetItem
 from isstools.elements.widget_motors import UIWidgetMotors, UIWidgetMotorsWithSlider
 from ..elements.elements import remove_special_characters
 
 
 
 from isstools.dialogs import UpdateUserDialog, SetEnergy, GetEmailAddress
-from PyQt5 import uic, QtWidgets
+from qtpy import uic, QtWidgets
 
 from xas.file_io import make_user_dir
 from isscloudtools.slack import *
@@ -27,7 +27,7 @@ from isscloudtools.gmail import *
 from isscloudtools.dropbox import *
 
 
-from PyQt5.QtWidgets import QLabel, QPushButton, QLineEdit, QSizePolicy, QSpacerItem
+from qtpy.QtWidgets import QLabel, QPushButton, QLineEdit, QSizePolicy, QSpacerItem
 from isstools.dialogs.BasicDialogs import question_message_box, error_message_box, message_box
 
 from isstools.dialogs.BasicDialogs import message_box, question_message_box
@@ -42,7 +42,7 @@ USER_PATH = 'processed'
 
 class UIUserManager(*uic.loadUiType(ui_path)):
 
-    sample_list_changed_signal = QtCore.pyqtSignal()
+    sample_list_changed_signal = QtCore.Signal()
 
     def __init__(self,
                  RE=None,

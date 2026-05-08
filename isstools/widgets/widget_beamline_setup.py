@@ -5,8 +5,8 @@ from datetime import datetime
 import bluesky.plan_stubs as bps
 import numpy as np
 import pkg_resources
-from PyQt5 import uic, QtWidgets, QtCore
-from PyQt5.QtCore import QThread, QSettings
+from qtpy import uic, QtWidgets, QtCore
+from qtpy.QtCore import QThread, QSettings
 from bluesky.callbacks import LivePlot
 from isstools.dialogs import (UpdateHHMFeedbackSettings, MoveMotorDialog)
 from isstools.dialogs.BasicDialogs import question_message_box, error_message_box, message_box

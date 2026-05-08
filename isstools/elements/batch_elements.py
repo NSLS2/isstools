@@ -1,8 +1,8 @@
 import numpy as np
 import pkg_resources
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.Qt import QObject
+from qtpy import QtCore, QtGui, QtWidgets
+from qtpy.QtCore import Qt
+from qtpy.QtCore import QObject
 import copy
 
 path_icon_experiment = pkg_resources.resource_filename('isstools', 'icons/experiment.png')

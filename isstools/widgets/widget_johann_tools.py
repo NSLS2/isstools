@@ -1,6 +1,6 @@
 import json
 import pkg_resources
-from PyQt5 import uic, QtWidgets, QtCore
+from qtpy import uic, QtWidgets, QtCore
 from isstools.widgets import widget_emission_energy_selector
 import bluesky.plan_stubs as bps
 from xas.spectrometer import Crystal

@@ -5,18 +5,20 @@ import bluesky.plan_stubs as bps
 import numpy as np
 import pkg_resources
 
-from PyQt5 import uic,  QtCore
+from qtpy import uic,  QtCore
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
-from PyQt5.Qt import QSplashScreen, QObject
+from qtpy.QtCore import QObject
+from qtpy.QtWidgets import QSplashScreen
+
 import numpy
-from PyQt5 import  QtWidgets
+from qtpy import  QtWidgets
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
-from PyQt5.QtCore import pyqtSignal
+from qtpy.QtCore import Signal
 
 from isstools.dialogs.BasicDialogs import question_message_box, error_message_box, message_box
 from isstools.elements.figure_update import update_figure, setup_figure
@@ -29,7 +31,7 @@ ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_xia_manager.ui')
 
 
 class UIXIAManager(*uic.loadUiType(ui_path)):
-    element_selected = pyqtSignal(str)  # Signal to send selected element
+    element_selected = Signal(str)  # Signal to send selected element
     def __init__(self,
                  service_plan_funcs=None,
                  ge_detector = None,

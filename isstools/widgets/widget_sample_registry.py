@@ -3,8 +3,8 @@ import sys
 
 import pkg_resources
 import json
-from PyQt5 import uic, QtCore, QtWidgets, QtGui
-from PyQt5.Qt import QObject
+from qtpy import uic, QtCore, QtWidgets, QtGui
+from qtpy.QtCore import QObject
 from bluesky.plan_stubs import mv
 # from isstools.batch.table_batch import XASBatchExperiment
 # from xas.trajectory import trajectory_manager

@@ -1,6 +1,6 @@
 import pkg_resources
-from PyQt5 import uic, QtCore
-from PyQt5.QtGui import QPixmap
+from qtpy import uic, QtCore
+from qtpy.QtGui import QPixmap
 from isstools.elements.widget_motors import UIWidgetMotors
 from isstools.elements.widget_spectrometer_R import UIWidgetSpectrometerR
 from isstools.dialogs.BasicDialogs import message_box, question_message_box

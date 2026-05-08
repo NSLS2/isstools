@@ -1,9 +1,9 @@
-from PyQt5 import QtCore, QtGui
+from qtpy import QtCore, QtGui
 import sys
 
 
 class EmittingStream(QtCore.QObject):
-    textWritten = QtCore.pyqtSignal(str)
+    textWritten = QtCore.Signal(str)
 
     # I think this code is writing a new subclass of stdout
     # (julien)

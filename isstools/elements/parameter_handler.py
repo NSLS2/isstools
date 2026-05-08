@@ -1,6 +1,6 @@
 import inspect
 import re
-from PyQt5 import QtWidgets
+from qtpy import QtWidgets
 
 
 def create_parameter(description, annotation, units=None):

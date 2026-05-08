@@ -1,5 +1,5 @@
 
-from PyQt5 import uic, QtGui, QtCore
+from qtpy import uic, QtGui, QtCore
 import pkg_resources
 import requests
 import urllib.request

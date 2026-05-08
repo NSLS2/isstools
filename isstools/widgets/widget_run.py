@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 
 import numpy as np
 import pkg_resources
-from PyQt5 import uic, QtCore
+from qtpy import uic, QtCore
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
     NavigationToolbar2QT as NavigationToolbar)
@@ -23,7 +23,7 @@ ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_run.ui')
 
 
 class UIRun(*uic.loadUiType(ui_path)):
-    # plansAdded = QtCore.pyqtSignal()
+    # plansAdded = QtCore.Signal()
 
     def __init__(self,
                  scan_manager = None,

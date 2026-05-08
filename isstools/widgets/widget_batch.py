@@ -1,10 +1,10 @@
 import sys
 
 import pkg_resources
-from PyQt5 import uic, QtGui, QtCore, QtWidgets
-from PyQt5.Qt import Qt
+from qtpy import uic, QtGui, QtCore, QtWidgets
+from qtpy.QtCore import Qt
 
-from PyQt5.QtWidgets import QMenu
+from qtpy.QtWidgets import QMenu
 # from xas.trajectory import trajectory_manager
 # from isstools.widgets import widget_batch_manual
 
@@ -24,9 +24,9 @@ ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_batch_manual.ui')
 
 
 class UIBatch(*uic.loadUiType(ui_path)):
-    sample_list_changed_signal = QtCore.pyqtSignal()
-    scan_list_changed_signal = QtCore.pyqtSignal()
-    batch_list_changed_signal = QtCore.pyqtSignal()
+    sample_list_changed_signal = QtCore.Signal()
+    scan_list_changed_signal = QtCore.Signal()
+    batch_list_changed_signal = QtCore.Signal()
     def __init__(self,
                  service_plan_funcs=None,
                  hhm=None,

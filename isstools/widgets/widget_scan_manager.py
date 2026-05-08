@@ -6,9 +6,9 @@ from isstools.widgets import widget_energy_selector
 
 import numpy as np
 import pkg_resources
-from PyQt5 import uic, QtWidgets, QtCore, QtGui
-from PyQt5.Qt import Qt
-from PyQt5.QtWidgets import QMenu
+from qtpy import uic, QtWidgets, QtCore, QtGui
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QMenu
 
 from isstools.conversions import xray
 from isstools.dialogs import UpdateAngleOffset
@@ -25,7 +25,7 @@ from isstools.widgets import widget_emission_energy_selector
 ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_scan_manager.ui')
 
 class UIScanManager(*uic.loadUiType(ui_path)):
-    scansChanged = QtCore.pyqtSignal()
+    scansChanged = QtCore.Signal()
 
     def __init__(self,
                  hhm= None,
