@@ -1,3 +1,4 @@
+import os
 import json
 import pkg_resources
 from PyQt5 import uic, QtWidgets, QtCore
@@ -9,12 +10,12 @@ ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_johann_spectrometer
 from isstools.elements.figure_update import update_figure_with_colorbar, update_figure, setup_figure
 # from isstools.dialogs import (MoveMotorDialog)
 from xas.spectrometer import analyze_elastic_scan
-import os
 from isstools.dialogs.BasicDialogs import message_box
 import numpy as np
 from xas.spectrometer import analyze_many_elastic_scans
 from xas.fitting import Nominal2ActualConverter
 from bluesky.callbacks import LivePlot
+from redis_json_dict import RedisJSONDict
 
 
 class UIJohannTools(*uic.loadUiType(ui_path)):
@@ -32,6 +33,7 @@ class UIJohannTools(*uic.loadUiType(ui_path)):
                  figure_proc=None,
                  canvas_proc=None,
                  toolbar_proc=None,
+                 redis_settings_client=None,
                  *args, **kwargs):
 
         super().__init__(*args, **kwargs)
@@ -47,6 +49,7 @@ class UIJohannTools(*uic.loadUiType(ui_path)):
 
         self.hhm=hhm
         self.johann_emission = johann_emission
+        self.redis_settings_client = redis_settings_client
 
         self.figure_proc = figure_proc,
         self.canvas_proc = canvas_proc,
@@ -373,6 +376,10 @@ class UIJohannTools(*uic.loadUiType(ui_path)):
 
         with open(filename, 'w') as f:
             f.write(json.dumps(spectrometer_dict))
+
+        redis_key = os.path.splitext(os.path.basename(filename))[0]
+        _store = RedisJSONDict(self.redis_settings_client, prefix=redis_key)
+        _store['config'] = spectrometer_dict
         print('Successfully saved the spectrometer config')
         self.lineEdit_current_spectrometer_file.setText(filename)
         # self.settings.setValue('johann_registration_file_str', filename)
@@ -389,17 +396,24 @@ class UIJohannTools(*uic.loadUiType(ui_path)):
         filename = self.lineEdit_current_spectrometer_file.text()
         print(filename)
         if filename:
-            with open(filename, 'r') as f:
-                spectrometer_dict = json.loads(f.read())
-                energy_limits = (spectrometer_dict['energy_limits_lo'], spectrometer_dict['energy_limits_hi'])
-                self._initialize_emission_motor(spectrometer_dict['registration_energy'],
-                                                spectrometer_dict['R'],
-                                                spectrometer_dict['kind'],
-                                                spectrometer_dict['hkl'],
-                                                cr_x0=spectrometer_dict['cr_x0'],
-                                                cr_y0=spectrometer_dict['cr_y0'],
-                                                det_y0=spectrometer_dict['det_y0'],
-                                                energy_limits=energy_limits)
+            redis_key = os.path.splitext(os.path.basename(filename))[0]
+            _store = RedisJSONDict(self.redis_settings_client, prefix=redis_key)
+            try:
+                spectrometer_dict = _store['config']
+            except KeyError:
+                # Fall back to reading from disk if not yet in Redis
+                with open(filename, 'r') as f:
+                    spectrometer_dict = json.loads(f.read())
+                _store['config'] = spectrometer_dict
+            energy_limits = (spectrometer_dict['energy_limits_lo'], spectrometer_dict['energy_limits_hi'])
+            self._initialize_emission_motor(spectrometer_dict['registration_energy'],
+                                            spectrometer_dict['R'],
+                                            spectrometer_dict['kind'],
+                                            spectrometer_dict['hkl'],
+                                            cr_x0=spectrometer_dict['cr_x0'],
+                                            cr_y0=spectrometer_dict['cr_y0'],
+                                            det_y0=spectrometer_dict['det_y0'],
+                                            energy_limits=energy_limits)
 
             print('Successfully loaded the spectrometer config')
 
