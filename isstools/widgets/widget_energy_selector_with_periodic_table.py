@@ -4,6 +4,7 @@ import json
 import pkg_resources
 from PyQt5 import uic
 from isstools.dialogs import PeriodicTable
+from redis_json_dict import RedisJSONDict
 
 ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_energy_selector_with_periodic_table.ui')
 ui_path_without_e0 = pkg_resources.resource_filename('isstools', 'ui/ui_energy_selector_without_e0.ui')
@@ -58,7 +59,7 @@ class UIEnergySelectorWithPeriodicTable(*uic.loadUiType(ui_path)):
 
 
 class UIEnergySelectorFoil(*uic.loadUiType(ui_path_without_e0)):
-    def __init__(self, emission = None, *args, **kwargs):
+    def __init__(self, emission = None, redis_settings_client=None, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
         self.setupUi(self)
@@ -74,9 +75,9 @@ class UIEnergySelectorFoil(*uic.loadUiType(ui_path_without_e0)):
 
 
 
-        with open(f'{ROOT_PATH_SHARED}/settings/json/foil_wheel.json') as fp:
-            foil_info = json.load(fp)
-            foils = [item['element'] for item in foil_info]
+        _foil_wheel_store = RedisJSONDict(redis_settings_client, prefix='foil_wheel')
+        foil_info = _foil_wheel_store['foil_wheel']
+        foils = [item['element'] for item in foil_info]
 
         self.elements_data = [item for item in self.elements_data if item['symbol'] in foils]
 
