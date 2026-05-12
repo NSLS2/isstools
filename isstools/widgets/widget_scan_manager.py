@@ -381,6 +381,10 @@ class UIScanManager(*uic.loadUiType(ui_path)):
     def _aux_parameters(self):
         return_dict = {'detectors' : self._scan_detectors,
                        'offset' : float(self.label_angle_offset.text())}
+        if self.checkBox_radiation_damage_scan.isChecked():
+            return_dict['radiation_damage_scan'] = True
+        else:
+            return_dict['radiation_damage_scan'] = False
         if not self.radioButton_spectrometer_none.isChecked():
             return_dict['spectrometer'] = self._spectrometer_parameters
         return_dict['scan_for_calibration_purpose'] = self.checkBox_calibration_purpose.isChecked()

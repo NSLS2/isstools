@@ -54,9 +54,13 @@ class UIInfoGeneral(*uic.loadUiType(ui_path)):
         self.RE = RE
         self.manager_dict = manager_dict
 
-        if parent.gmail_service is None:
-            self.push_cloud_setup.setEnabled(False)
-            self.push_send_results.setEnabled(False)
+
+        # if parent.gmail_service is None:
+        #     try:
+        #         self.push_cloud_setup.setEnabled(False)
+        #         self.push_send_results.setEnabled(False)
+        #     except:
+        #         pass
 
         if self.RE is not None:
             self.RE.is_aborted = False
@@ -74,9 +78,10 @@ class UIInfoGeneral(*uic.loadUiType(ui_path)):
             self.gmail_service = get_gmail_service()
             self.dropbox_service = get_dropbox_service()
         except:
-            self.push_cloud_setup.setEnable(False)
-            self.push_send_results.setEnable(False)
-            self.push_send_to_dropbox.setEnable(False)
+            pass
+            # self.push_cloud_setup.setEnable(False)
+            # self.push_send_results.setEnable(False)
+            # self.push_send_to_dropbox.setEnable(False)
 
 
 
