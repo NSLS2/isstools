@@ -2654,6 +2654,25 @@ Scan Manager</string>
     <bool>false</bool>
    </property>
   </widget>
+  <widget class="QCheckBox" name="checkBox_radiation_damage_scan">
+   <property name="geometry">
+    <rect>
+     <x>910</x>
+     <y>650</y>
+     <width>191</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Radiation Damage Scan</string>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="tristate">
+    <bool>false</bool>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
