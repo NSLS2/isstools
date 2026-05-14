@@ -1,12 +1,12 @@
 # Standard library
 import os
-import json
 from datetime import datetime
 from pathlib import Path
 
 # Third-party libraries
 import pkg_resources
 import requests
+from redis_json_dict import RedisJSONDict
 
 # PyQt5 modules
 from PyQt5 import uic, QtWidgets, QtCore
@@ -73,6 +73,7 @@ class UIProcessing(*uic.loadUiType(ui_path)):
                  hhm,
                  db,
                  parent_gui,
+                 redis_settings_client=None,
                  *args, **kwargs):
         '''
             hhm:
@@ -89,6 +90,7 @@ class UIProcessing(*uic.loadUiType(ui_path)):
         self.parent_gui = parent_gui
         self.hhm = hhm
         self.db = db
+        self.redis_settings_client = redis_settings_client
 
         self.settings = parent_gui.settings
 
@@ -206,26 +208,22 @@ class UIProcessing(*uic.loadUiType(ui_path)):
         self.proposal = str(self.comboBox_proposal.currentText()).split(' -')[0]
         self.year = str(self.comboBox_year.currentText())
         self.cycle = str(self.comboBox_cycle.currentText())
-        dir_path = os.path.join(ROOT_PATH, USER_PATH, self.year, self.cycle, self.proposal)
-        file_path = os.path.join(dir_path, 'processing_log.json')
 
-        if not os.path.exists(file_path):
-            print(f"No log file found at {file_path}")
-            return
+        redis_key = f'processing_log_{self.year}_{self.cycle}_{self.proposal}'
+        _log_store = RedisJSONDict(self.redis_settings_client, prefix=redis_key)
 
         try:
-            with open(file_path, 'r') as f:
-                log_data = json.load(f)
+            log_data = _log_store['log']
+        except KeyError:
+            log_data = []
 
-            for entry in log_data:
-                uid = entry.get('uid')
-                timestamp = entry.get('timestamp', 'Unknown time')
-                item_text = f"{uid}"
-                self.listWidget_processed_uids.addItem(QListWidgetItem(item_text))
-                self.processed_uid_list.append(uid)
-            print(f"Loaded {len(log_data)} entries into list")
-        except Exception as e:
-            print(f"Failed to load UIDs from JSON: {e}")
+        for entry in log_data:
+            uid = entry.get('uid')
+            timestamp = entry.get('timestamp', 'Unknown time')
+            item_text = f"{uid}"
+            self.listWidget_processed_uids.addItem(QListWidgetItem(item_text))
+            self.processed_uid_list.append(uid)
+        print(f"Loaded {len(log_data)} entries into list")
 
 
         start_date = f"{self.year}-{self.cycle_def[self.cycle][0]}-{self.cycle_def[self.cycle][1]}"

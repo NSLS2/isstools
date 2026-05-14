@@ -40,7 +40,7 @@ import time as ttime
 import traceback
 import pprint
 import os
-import json
+from redis_json_dict import RedisJSONDict
 
 ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_xlive.ui')
 
@@ -99,6 +99,7 @@ class XliveGui(*uic.loadUiType(ui_path)):
                  ic_amplifiers=None,
                  print_to_gui=None,
                  window_title=None,
+                 redis_settings_client=None,
                  *args, **kwargs):
 
 
@@ -116,6 +117,7 @@ class XliveGui(*uic.loadUiType(ui_path)):
         self.scan_manager = scan_manager
         self.johann_emission = johann_emission
         self.plan_processor = plan_processor
+        self.redis_settings_client = redis_settings_client
         # self.plan_processor.append_gui_plan_list_update_signal(self.plans_changed_signal)
         self.plan_processor.append_list_update_signal(self.plans_changed_signal)
         self.plan_processor.append_gui_status_update_signal(self.plan_processor_status_changed_signal)
@@ -216,6 +218,7 @@ class XliveGui(*uic.loadUiType(ui_path)):
         self.widget_processing = widget_processing.UIProcessing(hhm,
                                                                 db,
                                                                 parent_gui=self,
+                                                                redis_settings_client=redis_settings_client,
                                                                 )
         self.layout_processing.addWidget(self.widget_processing)
 
@@ -315,6 +318,7 @@ class XliveGui(*uic.loadUiType(ui_path)):
                                                                         attenuator_camera=detector_dict['Camera SP6']['device'],
                                                                         encoder_pb = self.hhm_encoder,
                                                                         aux_plan_funcs=aux_plan_funcs,
+                                                                        redis_settings_client=redis_settings_client,
                                                                         parent=self)
         self.layout_info_beamline.addWidget(self.widget_info_beamline)
 
@@ -665,17 +669,10 @@ class ProcessingThread(QThread):
         self.queue.put(None)
 
     def _write_uid_to_file(self, doc):
-        ROOT_PATH = '/nsls2/data/iss/legacy'
-        USER_PATH = 'processed'
-        #self.print(f"Full doc:\n{pprint.pformat(doc)}")
         uid = str(doc['uid'])
         cycle = str(doc['cycle'])
         year = str(doc['year'])
         proposal = str(doc['proposal'])
-
-        dir_path = os.path.join(ROOT_PATH, USER_PATH, year, cycle, proposal)
-        file_path = os.path.join(dir_path, 'processing_log.json')
-        os.makedirs(dir_path, exist_ok=True)
 
         # Create the new entry
         timestamp = ttime.strftime("%Y-%m-%d %H:%M:%S")
@@ -685,21 +682,17 @@ class ProcessingThread(QThread):
         }
 
         try:
-            # Load existing log if it exists
-            if os.path.exists(file_path):
-                with open(file_path, 'r') as f:
-                    log_data = json.load(f)
-            else:
+            redis_key = f'processing_log_{year}_{cycle}_{proposal}'
+            _log_store = RedisJSONDict(self.gui.redis_settings_client, prefix=redis_key)
+            try:
+                log_data = _log_store['log']
+            except KeyError:
                 log_data = []
 
             log_data.append(entry)
-
-            # Save back to the file
-            with open(file_path, 'w') as f:
-                json.dump(log_data, f, indent=2)
-            #self.print(f"Appended UID to {file_path}: {entry}")
+            _log_store['log'] = log_data
         except Exception as e:
-            self.print(f"Failed to write UID to JSON file: {e}")
+            self.print(f"Failed to write UID to Redis: {e}")
 
     def run(self):
         while self._running:
