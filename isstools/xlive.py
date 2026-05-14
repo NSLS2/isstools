@@ -177,8 +177,8 @@ class XliveGui(*uic.loadUiType(ui_path)):
             print('starting slackbot', ttime.ctime())
             self.slack_client_bot, self.slack_client_oath = get_slack_service()
             print('done slackbot', ttime.ctime())
-            self.gmail_service = get_gmail_service()
-            #self.gmail_service = None
+            # self.gmail_service = get_gmail_service()
+            self.gmail_service = None
             print('starting dropbox', ttime.ctime())
             self.dropbox_service = get_dropbox_service()
             print('done dropbox', ttime.ctime())
