@@ -266,8 +266,10 @@ class UISDDManager(*uic.loadUiType(ui_path)):
         if self.acquired:
             for indx in range(self.num_channels):
                 if getattr(self, self.checkbox_ch.format(indx+1)).isChecked():
-                    ch = getattr(self.xs,'mca{}'.format(indx+1))
-                    mca = ch.get()
+                    ch = getattr(self.xs,'channel{:02d}'.format(indx+1))
+                    mca_ch = getattr(ch, 'mca')
+                    mcaTuple = mca_ch.get()
+                    mca = mcaTuple.array_data
                     max_mca.append(max(mca[10:]))
                     # energy = np.array(list(range(len(mca))))*10
                     energy = np.arange(mca.size)*10

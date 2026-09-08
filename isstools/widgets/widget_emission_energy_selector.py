@@ -168,7 +168,8 @@ class UIEmissionLineSelectorEnergyOnly(*uic.loadUiType(ui_path_no_optics)):
             current_line = self.comboBox_line.currentText()
             try:
                 df = self.elements_data
-                energy = float(df[(df.element == current_element) & (df.symbol == current_line)].energy.values)
+                # energy = float(df[(df.element == current_element) & (df.symbol == current_line)].energy.values)
+                energy = float(df[(df.element == current_element) & (df.symbol == current_line)].energy)
                 self.edit_E.setText(f'{energy : .1f}')
             except:
                 pass
