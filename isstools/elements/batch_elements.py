@@ -5,21 +5,13 @@ from PyQt5.QtCore import Qt
 from PyQt5.Qt import QObject
 import copy
 
-path_icon_experiment = resource_path('icons/experiment.png')
-icon_experiment = QtGui.QIcon()
-icon_experiment.addPixmap(QtGui.QPixmap(path_icon_experiment), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+from functools import lru_cache
 
-path_icon_sample = resource_path('icons/sample.png')
-icon_sample = QtGui.QIcon()
-icon_sample.addPixmap(QtGui.QPixmap(path_icon_sample), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
-path_icon_scan = resource_path('icons/scan.png')
-icon_scan = QtGui.QIcon()
-icon_scan.addPixmap(QtGui.QPixmap(path_icon_scan), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-path_icon_service = resource_path('icons/service.png')
-icon_service = QtGui.QIcon()
-icon_service.addPixmap(QtGui.QPixmap(path_icon_service), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+@lru_cache(maxsize=4)
+def _batch_icon(kind):
+    # Construct icons only when a GUI item is created, after QApplication exists.
+    return QtGui.QIcon(resource_path(f'icons/{kind}.png'))
 
 
 def _create_batch_experiment(experiment_name, experiment_rep, model=None):
@@ -30,7 +22,7 @@ def _create_batch_experiment(experiment_name, experiment_rep, model=None):
     item.setDropEnabled(True)
     item.item_type = 'experiment'
     item.repeat = experiment_rep
-    item.setIcon(icon_experiment)
+    item.setIcon(_batch_icon('experiment'))
     if model:
         parent = model.invisibleRootItem()
         parent.appendRow(item)
@@ -51,7 +43,7 @@ def _create_new_sample(sample_name, sample_comment, sample_x, sample_y, sample_z
     item.th = sample_th
     item.name = sample_name
     item.comment = sample_comment
-    item.setIcon(icon_sample)
+    item.setIcon(_batch_icon('sample'))
     if model:
         parent = model.invisibleRootItem()
         parent.appendRow(item)
@@ -72,7 +64,7 @@ def _create_new_scan(scan_name, scan_type, scan_traj, scan_repeat, scan_delay, s
     if setCheckable:
         item.setCheckable(True)
     item.setEditable(False)
-    item.setIcon(icon_scan)
+    item.setIcon(_batch_icon('scan'))
     if model:
         parent = model.invisibleRootItem()
         parent.appendRow(item)
@@ -84,7 +76,7 @@ def _create_service_item(name, service_plan, service_params):
     item = QtGui.QStandardItem(f'Service: {name}')
     item.item_type = 'service'
     item.name = name
-    item.setIcon(icon_service)
+    item.setIcon(_batch_icon('service'))
     item.service_plan = service_plan
     item.service_params = service_params
     return item
@@ -99,7 +91,7 @@ def _clone_sample_item(item_sample):
     new_item_sample.th = item_sample.th
     new_item_sample.name = item_sample.name
     new_item_sample.comment = item_sample.comment
-    new_item_sample.setIcon(icon_sample)
+    new_item_sample.setIcon(_batch_icon('sample'))
     return new_item_sample
 
 def _clone_scan_item(item_scan):

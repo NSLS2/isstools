@@ -24,7 +24,7 @@ setuptools.setup(
     license="BSD-3-Clause",
     url="https://github.com/NSLS2/isstools",
     packages=setuptools.find_packages(),
-    python_requires=">=3.10",
+    python_requires=">=3.12",
     package_data={"isstools": [
         "dialogs/*.ui", "ui/*.ui", "*.json", "elements/*.ui",
         "schemas/*.json", "icons/*.png", "icons/*.svg", "Resources/*.png",

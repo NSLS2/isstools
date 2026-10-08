@@ -3,6 +3,7 @@ import json
 from PyQt5 import QtWidgets, QtCore, QtGui
 from isstools.dialogs.BasicDialogs import message_box, question_message_box
 import pandas as pd
+import xraydb
 
 def get_element_dict():
     return {item['symbol']: item for item in load_json('edges_lines.json')}
@@ -262,5 +263,4 @@ class TreeView(QtWidgets.QTreeView):
 #
 #
 # bla.subscribe(print_value)
-
 

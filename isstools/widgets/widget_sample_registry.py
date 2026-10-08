@@ -19,7 +19,6 @@ import time as ttime
 from isstools.batch.autopilot_routines import Experiment, TrajectoryStack
 from isstools.elements.batch_motion import SamplePositioner
 import bluesky.plan_stubs as bps
-from pyzbar.pyzbar import decode as pzDecode
 import pandas as pd
 from isstools.elements.elements import remove_ev_from_energy_str, remove_edge_from_edge_str, clean_el_str
 from isstools.elements.batch_elements import *
@@ -908,7 +907,6 @@ class UISampleRegistry(*uic.loadUiType(ui_path)):
     #                         yield from plan(**kwargs)
     #                 elif step.item_type == 'service':
     #                     yield from step.service_plan(**step.service_params)
-
 
 
 

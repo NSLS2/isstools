@@ -1,14 +1,15 @@
 # Public runtime dependencies. Beamline-specific packages are documented in README.md.
 bluesky>=1.13,<2
-databroker>=1.2.5,<2
+databroker[back-compat]>=2.0.0b68,<3
 matplotlib>=3.8,<4
-numpy>=1.24,<3
+numpy>=1.26,<3
 ophyd>=1.9,<2
-pandas>=2.0,<3
+pandas>=2.2,<4
 Pillow>=10,<13
-PyQt5>=5.15.9,<5.16
+PyQt5>=5.15.11,<6
 pyzbar>=0.1.9,<0.2
 QtPy>=2.4,<3
 requests>=2.32,<3
-scipy>=1.10,<2
+scipy>=1.12,<2
 xraydb>=4.5,<5
+pims>=0.7,<1
