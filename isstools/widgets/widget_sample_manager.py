@@ -1,7 +1,7 @@
 import re
 import sys
 import numpy as np
-import pkg_resources
+from isstools.resources import resource_path
 import math
 
 from PyQt5 import uic, QtGui, QtCore, QtWidgets
@@ -20,8 +20,8 @@ from isstools.dialogs.BasicDialogs import message_box, question_message_box
 
 import matplotlib.path as mpltPath
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_sample_manager.ui')
-coordinate_system_file = pkg_resources.resource_filename('isstools', 'icons/Coordinate system.png')
+ui_path = resource_path('ui/ui_sample_manager.ui')
+coordinate_system_file = resource_path('icons/Coordinate system.png')
 
 
 

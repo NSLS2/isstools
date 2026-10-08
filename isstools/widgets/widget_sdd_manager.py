@@ -3,7 +3,7 @@ import time as ttime
 import bluesky.plan_stubs as bps
 
 import numpy as np
-import pkg_resources
+from isstools.resources import resource_path
 
 from PyQt5 import uic,  QtCore
 from matplotlib.backends.backend_qt5agg import (
@@ -19,7 +19,7 @@ from isstools.elements.figure_update import update_figure, setup_figure
 
 # from isstools.widgets import widget_energy_selector
 from isstools.widgets import widget_energy_selector_with_periodic_table
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_sdd_manager.ui')
+ui_path = resource_path('ui/ui_sdd_manager.ui')
 
 
 class UISDDManager(*uic.loadUiType(ui_path)):

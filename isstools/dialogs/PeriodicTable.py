@@ -1,9 +1,9 @@
 from PyQt5 import uic, QtGui, QtCore
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QPushButton, QLabel
 
-ui_path = pkg_resources.resource_filename('isstools', 'dialogs/PeriodicTable.ui')
+ui_path = resource_path('dialogs/PeriodicTable.ui')
 
 from PyQt5 import uic, QtGui, QtCore
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLabel, QMainWindow

@@ -1,7 +1,7 @@
 import re
 import sys
 import numpy as np
-import pkg_resources
+from isstools.resources import resource_path
 import math
 
 from PyQt5 import uic, QtGui, QtCore, QtWidgets
@@ -42,7 +42,7 @@ import pprint
 import os
 import json
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_xlive.ui')
+ui_path = resource_path('ui/ui_xlive.ui')
 
 
 

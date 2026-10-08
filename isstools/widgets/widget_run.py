@@ -2,7 +2,7 @@ import datetime
 from timeit import default_timer as timer
 
 import numpy as np
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtCore
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg as FigureCanvas,
@@ -18,7 +18,7 @@ from bluesky.callbacks import LivePlot
 from ..elements.liveplots import XASPlot#, XASPlotX
 from ..elements.elements import remove_special_characters
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_run.ui')
+ui_path = resource_path('ui/ui_run.ui')
 
 
 
@@ -213,7 +213,7 @@ class UIRun(*uic.loadUiType(ui_path)):
             frameon=False
         )
         self.figure.tight_layout()
-        self.canvas.draw()
+        self.canvas.draw_idle()
 
     def draw_interpolated_data(self, df_interp, df_binned):
         update_figure([self.figure.ax2, self.figure.ax1, self.figure.ax3], self.toolbar, self.canvas)
@@ -262,7 +262,7 @@ class UIRun(*uic.loadUiType(ui_path)):
 
         self.figure.ax3.set_xlabel('Energy, eV', fontsize=14)
         # self.figure.tight_layout()
-        self.canvas.draw()
+        self.canvas.draw_idle()
 
     def _mask_data(self, energy, data):
         mask = np.isfinite(data)

@@ -1,12 +1,12 @@
 import json
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic
 from isstools.elements.elements import elements_lines_dict
 from ..elements.elements import get_spectrometer_line_dict
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_emission_energy_selector.ui')
-ui_path_no_optics = pkg_resources.resource_filename('isstools', 'ui/ui_emission_energy_selector_no_optics.ui')
-# ui_path_no_optics = pkg_resources.resource_filename('isstools', 'ui/ui_emission_energy_selector_no_optics.ui')
+ui_path = resource_path('ui/ui_emission_energy_selector.ui')
+ui_path_no_optics = resource_path('ui/ui_emission_energy_selector_no_optics.ui')
+# ui_path_no_optics = resource_path('ui/ui_emission_energy_selector_no_optics.ui')
 from xraydb import xray_line
 
 class UIEmissionEnergySelector(*uic.loadUiType(ui_path)):
@@ -15,7 +15,7 @@ class UIEmissionEnergySelector(*uic.loadUiType(ui_path)):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
         self.settings = parent.parent.parent.settings
-        # json_data = open(pkg_resources.resource_filename('isstools', 'edges_lines.json')).read()
+        # json_data = open(resource_path('edges_lines.json')).read()
         # self.elements_data = json.loads(json_data)
         self.elements_data = elements_lines_dict
         elems = [k for k in self.elements_data.keys()]
@@ -73,7 +73,7 @@ class UIEmissionEnergySelectorEnergyOnly(*uic.loadUiType(ui_path_no_optics)):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
         self.settings = parent.parent.settings
-        # json_data = open(pkg_resources.resource_filename('isstools', 'edges_lines.json')).read()
+        # json_data = open(resource_path('edges_lines.json')).read()
         # self.elements_data = json.loads(json_data)
         self.elements_data = elements_lines_dict
         elems = [k for k in self.elements_data.keys()]
@@ -127,7 +127,7 @@ class UIEmissionLineSelectorEnergyOnly(*uic.loadUiType(ui_path_no_optics)):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
         self.settings = parent.parent.settings
-        # json_data = open(pkg_resources.resource_filename('isstools', 'edges_lines.json')).read()
+        # json_data = open(resource_path('edges_lines.json')).read()
         # self.elements_data = json.loads(json_data)
         df = get_spectrometer_line_dict()
         self.elements_data = df

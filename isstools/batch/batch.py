@@ -16,7 +16,7 @@ class BatchManager():
         
         for name, columns in [[name, tables[name].columns[-1::-1]] for name in [table for table in tables.keys()]]:
             for column in columns:
-                if tables[name][[column]].isnull().get()s.all():
+                if tables[name][[column]].isnull().values.all():
                     tables[name] = tables[name].drop(tables[name].columns[[column]], axis = 1)
         
         for name in tables.keys():
@@ -28,7 +28,7 @@ class BatchManager():
         
         for name, columns in [[name, tables[name].columns[-1::-1]] for name in [table for table in ['Create Scans']]]:
             for column in columns:
-                if tables[name][[column]].isnull().get()s.all():
+                if tables[name][[column]].isnull().values.all():
                     tables[name] = tables[name].drop(tables[name].columns[[tables['Create Scans'].columns.get_loc(column)]], axis = 1)
         
         for name in tables.keys():

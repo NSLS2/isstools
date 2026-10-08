@@ -8,9 +8,9 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTimer
 
 from PyQt5 import uic, QtGui, QtCore
-import pkg_resources
+from isstools.resources import resource_path
 
-ui_path = pkg_resources.resource_filename('isstools', 'elements/roi_widget.ui')
+ui_path = resource_path('elements/roi_widget.ui')
 
 class ROIWidget(*uic.loadUiType(ui_path)):
     def __init__(self, ge_detector, roi = 1, channel=1):

@@ -5,7 +5,7 @@ from isstools.widgets import widget_energy_selector
 
 
 import numpy as np
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtWidgets, QtCore, QtGui
 from PyQt5.Qt import Qt
 from PyQt5.QtWidgets import QMenu
@@ -22,7 +22,7 @@ from isstools.dialogs.BasicDialogs import question_message_box, message_box
 from ..elements.elements import remove_special_characters
 from isstools.widgets import widget_emission_energy_selector
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_scan_manager.ui')
+ui_path = resource_path('ui/ui_scan_manager.ui')
 
 class UIScanManager(*uic.loadUiType(ui_path)):
     scansChanged = QtCore.pyqtSignal()

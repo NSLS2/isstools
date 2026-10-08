@@ -1,4 +1,4 @@
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtCore
 
 from matplotlib.widgets import RectangleSelector, Cursor

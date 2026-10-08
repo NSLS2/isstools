@@ -1,23 +1,23 @@
 import numpy as np
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.Qt import QObject
 import copy
 
-path_icon_experiment = pkg_resources.resource_filename('isstools', 'icons/experiment.png')
+path_icon_experiment = resource_path('icons/experiment.png')
 icon_experiment = QtGui.QIcon()
 icon_experiment.addPixmap(QtGui.QPixmap(path_icon_experiment), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
-path_icon_sample = pkg_resources.resource_filename('isstools', 'icons/sample.png')
+path_icon_sample = resource_path('icons/sample.png')
 icon_sample = QtGui.QIcon()
 icon_sample.addPixmap(QtGui.QPixmap(path_icon_sample), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
-path_icon_scan = pkg_resources.resource_filename('isstools', 'icons/scan.png')
+path_icon_scan = resource_path('icons/scan.png')
 icon_scan = QtGui.QIcon()
 icon_scan.addPixmap(QtGui.QPixmap(path_icon_scan), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
-path_icon_service = pkg_resources.resource_filename('isstools', 'icons/service.png')
+path_icon_service = resource_path('icons/service.png')
 icon_service = QtGui.QIcon()
 icon_service.addPixmap(QtGui.QPixmap(path_icon_service), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 

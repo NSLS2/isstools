@@ -1,12 +1,12 @@
 
 import json
 
-import pkg_resources
+from isstools.resources import load_json, resource_path
 from PyQt5 import uic
 from isstools.dialogs import PeriodicTable
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_energy_selector_with_periodic_table.ui')
-ui_path_without_e0 = pkg_resources.resource_filename('isstools', 'ui/ui_energy_selector_without_e0.ui')
+ui_path = resource_path('ui/ui_energy_selector_with_periodic_table.ui')
+ui_path_without_e0 = resource_path('ui/ui_energy_selector_without_e0.ui')
 
 ROOT_PATH_SHARED = '/nsls2/data/iss/legacy/xf08id'
 
@@ -17,12 +17,12 @@ class UIEnergySelectorWithPeriodicTable(*uic.loadUiType(ui_path)):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
         if emission:
-           json_data = open(pkg_resources.resource_filename('isstools', 'fluorescence_lines.json')).read()
+           elements_data = load_json('fluorescence_lines.json')
         else:
-            json_data = open(pkg_resources.resource_filename('isstools', 'absorption_edges2.json')).read()
+            elements_data = load_json('absorption_edges2.json')
             self.label_edge_line.setText('Line')
 
-        self.elements_data = json.loads(json_data)
+        self.elements_data = elements_data
         self.pushButton_element.pressed.connect(self.show_periodic_table)
         self.comboBox_edge.currentIndexChanged.connect(self.update_e0_value)
 
@@ -63,12 +63,12 @@ class UIEnergySelectorFoil(*uic.loadUiType(ui_path_without_e0)):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
         if emission:
-           json_data = open(pkg_resources.resource_filename('isstools', 'fluorescence_lines.json')).read()
+           elements_data = load_json('fluorescence_lines.json')
         else:
-            json_data = open(pkg_resources.resource_filename('isstools', 'edges_lines.json')).read()
+            elements_data = load_json('edges_lines.json')
             self.label_edge_line.setText('Line')
 
-        self.elements_data = json.loads(json_data)
+        self.elements_data = elements_data
         self.comboBox_element.currentIndexChanged.connect(self.update_combo_edge)
         # self.comboBox_edge.currentIndexChanged.connect(self.update_e0_value)
 

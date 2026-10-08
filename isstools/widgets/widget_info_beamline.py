@@ -1,6 +1,6 @@
 
 from PyQt5 import uic, QtGui, QtCore
-import pkg_resources
+from isstools.resources import resource_path
 import requests
 import urllib.request
 import numpy as np
@@ -17,7 +17,7 @@ import bluesky.plan_stubs as bps
 
 import uuid
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_info_beamline.ui')
+ui_path = resource_path('ui/ui_info_beamline.ui')
 
 ROOT_PATH_SHARED = '/nsls2/data/iss/legacy/xf08id'
 

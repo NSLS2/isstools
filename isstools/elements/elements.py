@@ -1,16 +1,11 @@
-import pkg_resources
+from isstools.resources import load_json, resource_path
 import json
 from PyQt5 import QtWidgets, QtCore, QtGui
 from isstools.dialogs.BasicDialogs import message_box, question_message_box
 import pandas as pd
 
 def get_element_dict():
-    json_data = open(pkg_resources.resource_filename('isstools', 'edges_lines.json')).read()
-    element_dict = {}
-
-    for i in json.loads(json_data):
-        element_dict[i['symbol']] = i
-    return element_dict
+    return {item['symbol']: item for item in load_json('edges_lines.json')}
 
 element_dict = get_element_dict()
 
@@ -165,7 +160,7 @@ def compute_line_dictionary_for_spectrometer():
     df.to_json(filepath)
 
 def get_spectrometer_line_dict():
-    fname = pkg_resources.resource_filename('isstools', 'fluorescence_lines2.json')
+    fname = resource_path('fluorescence_lines2.json')
     return pd.read_json(fname)
 
 class TreeView(QtWidgets.QTreeView):

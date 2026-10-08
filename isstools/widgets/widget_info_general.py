@@ -1,6 +1,6 @@
 
 from PyQt5 import uic, QtGui, QtCore
-import pkg_resources
+from isstools.resources import resource_path
 import requests
 import urllib.request
 import numpy as np
@@ -20,7 +20,7 @@ from isscloudtools.gmail import *
 from isscloudtools.dropbox import *
 import uuid
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_info_general.ui')
+ui_path = resource_path('ui/ui_info_general.ui')
 
 ROOT_PATH = '/nsls2/data/iss/legacy'
 USER_PATH = 'processed'
@@ -145,7 +145,7 @@ class UIInfoGeneral(*uic.loadUiType(ui_path)):
         dlg = GetEmailAddress.GetEmailAddress('', parent=self)
         if dlg.exec_():
             email_address = dlg.getValue()
-            regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+            regex = r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
             if re.search(regex, email_address):
                  #print(f'email {email_address}')
                 pass
@@ -219,7 +219,7 @@ class UIInfoGeneral(*uic.loadUiType(ui_path)):
     #     dlg = GetEmailAddress.GetEmailAddress('', parent=self)
     #     if dlg.exec_():
     #         email_address = dlg.getValue()
-    #         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+    #         regex = r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
     #         if re.search(regex, email_address):
     #              #print(f'email {email_address}')
     #             pass

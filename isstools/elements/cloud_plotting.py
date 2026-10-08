@@ -63,7 +63,7 @@ def generate_output_figures(filepath, imagepath=None, t_flag=True, f_flag=True, 
     for ax in ax_mu_flat:
         ax.set_ylabel('mu norm')
     for ax in ax_chi:
-        ax.set_ylabel('$\chi$(k) * k$^{2}$')
+        ax.set_ylabel(r'$\chi$(k) * k$^{2}$')
 
     ax1.set_title('Transmission')
     ax2.set_title('Fluorescence')

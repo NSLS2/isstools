@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 # Third-party libraries
-import pkg_resources
+from isstools.resources import resource_path
 import requests
 
 # PyQt5 modules
@@ -19,7 +19,7 @@ from PyQt5.Qt import Qt
 from databroker.queries import TimeRange, Key
 
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_processing.ui')
+ui_path = resource_path('ui/ui_processing.ui')
 ROOT_PATH = '/nsls2/data/iss/legacy'
 USER_PATH = 'processed'
 

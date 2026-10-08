@@ -1,7 +1,7 @@
 from PyQt5 import uic, QtGui, QtCore
-import pkg_resources
+from isstools.resources import resource_path
 
-ui_path = pkg_resources.resource_filename('isstools', 'dialogs/UpdateMotorLimits.ui')
+ui_path = resource_path('dialogs/UpdateMotorLimits.ui')
 
 class UIUpdateMotorLimit(*uic.loadUiType(ui_path)):
 

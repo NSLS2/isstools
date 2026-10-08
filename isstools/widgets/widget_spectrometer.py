@@ -1,4 +1,4 @@
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtCore import QThread, QSettings
 from PyQt5.Qt import QObject
@@ -29,7 +29,7 @@ from ..elements.elements import get_spectrometer_line_dict
 # from isstools.elements.liveplots import NormPlot
 from isstools.widgets import widget_emission_energy_selector
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_spectrometer.ui')
+ui_path = resource_path('ui/ui_spectrometer.ui')
 
 
 class UISpectrometer(*uic.loadUiType(ui_path)):

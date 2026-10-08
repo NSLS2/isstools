@@ -48,7 +48,7 @@ def setup_figure(parent, layout):
     layout.addWidget(toolbar)
     layout.addWidget(canvas)
     canvas.draw_idle()
-    cursor = Cursor(figure.ax, useblit=True, color='green', linewidth=0.75)
+    canvas._cursor = Cursor(figure.ax, useblit=True, color='green', linewidth=0.75)
     figure.ax.grid(alpha=0.4)
     #figure.tight_layout()
 

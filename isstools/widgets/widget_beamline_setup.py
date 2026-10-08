@@ -4,7 +4,7 @@ from datetime import datetime
 
 import bluesky.plan_stubs as bps
 import numpy as np
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtWidgets, QtCore
 from PyQt5.QtCore import QThread, QSettings
 from bluesky.callbacks import LivePlot
@@ -20,7 +20,7 @@ from isstools.elements.figure_update import update_figure, setup_figure
 import xraydb
 from xas.energy_calibration import find_correct_foil
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_beamline_setup.ui')
+ui_path = resource_path('ui/ui_beamline_setup.ui')
 
 
 class UIBeamlineSetup(*uic.loadUiType(ui_path)):

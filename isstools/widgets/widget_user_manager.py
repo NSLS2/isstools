@@ -1,7 +1,7 @@
 import re
 import sys
 import numpy as np
-import pkg_resources
+from isstools.resources import resource_path
 import math
 import requests
 import time as ttime
@@ -34,7 +34,7 @@ from isstools.dialogs.BasicDialogs import message_box, question_message_box
 
 import matplotlib.path as mpltPath
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_user_manager.ui')
+ui_path = resource_path('ui/ui_user_manager.ui')
 
 
 ROOT_PATH = '/nsls2/data/iss/legacy'
@@ -355,7 +355,7 @@ class UIUserManager(*uic.loadUiType(ui_path)):
             if dlg.exec_():
                 email_address = dlg.getValue()
 
-        regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        regex = r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
         if re.search(regex, email_address):
             # print(f'email {email_address}')
             pass

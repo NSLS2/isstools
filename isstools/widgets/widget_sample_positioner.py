@@ -1,9 +1,9 @@
 import json
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtCore
 from isstools.elements.elements import elements_lines_dict
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_sample_positioner.ui')
+ui_path = resource_path('ui/ui_sample_positioner.ui')
 from xraydb import xray_line
 import bluesky.plan_stubs as bps
 

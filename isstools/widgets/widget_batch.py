@@ -1,6 +1,6 @@
 import sys
 
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtGui, QtCore, QtWidgets
 from PyQt5.Qt import Qt
 
@@ -20,7 +20,7 @@ from isstools.dialogs.BasicDialogs import question_message_box
 import bluesky.plan_stubs as bps
 from ..elements.elements import remove_special_characters
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_batch_manual.ui')
+ui_path = resource_path('ui/ui_batch_manual.ui')
 
 
 class UIBatch(*uic.loadUiType(ui_path)):

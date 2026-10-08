@@ -1,4 +1,4 @@
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtCore
 from matplotlib.widgets import RectangleSelector, Cursor
 from PyQt5.Qt import QSplashScreen, QObject
@@ -15,13 +15,13 @@ from matplotlib.figure import Figure
 import matplotlib.patches as patches
 import time as ttime
 
-from isstools.elements.figure_update import update_figure
-
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_pilatus.ui')
-spectrometer_image1 = pkg_resources.resource_filename('isstools', 'Resources/spec_image1.png')
-spectrometer_image2 = pkg_resources.resource_filename('isstools', 'Resources/spec_image2.png')
+ui_path = resource_path('ui/ui_pilatus.ui')
+spectrometer_image1 = resource_path('Resources/spec_image1.png')
+spectrometer_image2 = resource_path('Resources/spec_image2.png')
 
 class UIPilatusMonitor(*uic.loadUiType(ui_path)):
+    image_update_requested = QtCore.pyqtSignal()
+
     def __init__(self,
                 detector_dict=None,
                 plan_processor=None,
@@ -103,7 +103,6 @@ class UIPilatusMonitor(*uic.loadUiType(ui_path)):
 
         self.RS = RectangleSelector(self.figure_pilatus_image.ax,
                                                     self.line_select_callback,
-                                                    drawtype='box',
                                                     useblit=True,
                                                     button=[1, 3],
                                                     minspanx=5,
@@ -155,6 +154,9 @@ class UIPilatusMonitor(*uic.loadUiType(ui_path)):
                                          "background-color : yellow"
                                          "}")
 
+        self.image_update_requested.connect(
+            self.update_pilatus_image, QtCore.Qt.QueuedConnection
+        )
         self.pilatus100k_device.cam.acquire.subscribe(self.update_image_widget)
 
     def update_counts_n_energy(self):
@@ -376,63 +378,55 @@ class UIPilatusMonitor(*uic.loadUiType(ui_path)):
 
 
 ##### Update, Add Pilatus Image
+    @QtCore.pyqtSlot()
     def update_pilatus_image(self):
         try:
+            # Correct display pixels on a copy, leaving the detector cache intact.
+            image = self.pilatus100k_device.image.array_data.value.reshape(195, 487).copy()
+            image[[158, 15, 171, 171], [11, 352, 364, 365]] = 0
+            image_min, image_max = image.min(), image.max()
+            for slider in (self.horizontalSlider_min, self.horizontalSlider_max):
+                slider.setRange(int(image_min), int(image_max))
+
+            axes = self.figure_pilatus_image.ax
+            if self._image_artist is None:
+                self._image_artist = axes.imshow(
+                    image.T, aspect='auto', vmin=self._min, vmax=self._max
+                )
+                axes.set_xticks([])
+                axes.set_yticks([])
+                self.figure_pilatus_image.tight_layout()
+            else:
+                self._image_artist.set_data(image.T)
+                # set_clim(None, None) keeps old limits; autoscale needs new bounds.
+                self._image_artist.set_clim(
+                    image_min if self._min is None else self._min,
+                    image_max if self._max is None else self._max,
+                )
+
+            # Keep the axes, zoom, selector and ROI artists between frames.
+            for i in range(1, 5):
+                key = f'checkBox_roi{i}'
+                rect = self._patches.get(key)
+                if getattr(self, key).isChecked():
+                    x, y, dx, dy = self.pilatus100k_device.get_roi_coords(i)
+                    if rect is None or rect.axes is not axes:
+                        rect = patches.Rectangle(
+                            (y, x), dy, dx, linewidth=1,
+                            edgecolor=self.colors[i], facecolor='none'
+                        )
+                        self._patches[key] = axes.add_patch(rect)
+                    else:
+                        rect.set_bounds(y, x, dy, dx)
+                elif rect is not None:
+                    if rect.axes is axes:
+                        rect.remove()
+                    self._patches.pop(key)
 
             self.last_image_update_time = ttime.time()
-            update_figure([self.figure_pilatus_image.ax],
-                          self.toolbar_pilatus_image,
-                          self.canvas_pilatus_image)
-
-            _img = self.pilatus100k_device.image.array_data.value.reshape(195, 487)
-            ## Dead pixels
-            _img[158, 11] = 0
-            _img[15, 352] = 0
-            _img[171, 364] = 0
-            _img[171, 365] = 0
-
-            # self._min = _img.min()
-            # self._max = _img.max()
-            self.horizontalSlider_min.setMinimum(_img.min())
-            self.horizontalSlider_max.setMinimum(_img.min())
-            self.horizontalSlider_min.setMaximum(_img.max())
-            self.horizontalSlider_max.setMaximum(_img.max())
-            # self.horizontalSlider_min.setValue(_img.min())
-            # self.horizontalSlider_max.setValue(_img.max())
-
-            # self.label_min.setText (str(self._min))
-            # self.label_max.setText(str(self._max))
-
-
-
-
-            self.figure_pilatus_image.ax.imshow(_img.T, aspect='auto', vmin=self._min, vmax=self._max)
-
-
-            # Add the patch to the Axes
-
-            for i in range(1,5):
-                if getattr(self, 'checkBox_roi' + str(i)).isChecked():
-                    x, y, dx, dy = self.pilatus100k_device.get_roi_coords(i)
-                    rect = patches.Rectangle((y, x), dy, dx, linewidth=1, edgecolor=self.colors[i], facecolor='none')
-                    self._patches['checkBox_roi' + str(i)] = self.figure_pilatus_image.ax.add_patch(rect)
-                    # self.canvas_pilatus_image.draw_idle()
-                if not getattr(self, 'checkBox_roi' + str(i)).isChecked():
-                    try:
-                        self._patches['checkBox_roi' + str(i)].remove()
-                        # self.canvas_pilatus_image.draw_idle()
-                    except:
-                        pass
-
-
-
-            # self.figure_pilatus_image.ax.autoscale(True)
-            self.figure_pilatus_image.ax.set_xticks([])
-            self.figure_pilatus_image.ax.set_yticks([])
             self.canvas_pilatus_image.draw_idle()
-            self.figure_pilatus_image.tight_layout()
-        except Exception as e:
-            print('Could not update the image. Error: ',e)
+        except Exception as exc:
+            print('Could not update the image. Error: ', exc)
 
     def update_continuous_plot(self):
         if self.radioButton_continuous_exposure.isChecked() or self.checkBox_detector_flying.isChecked():
@@ -443,7 +437,7 @@ class UIPilatusMonitor(*uic.loadUiType(ui_path)):
 
     def update_image_widget(self, value, old_value, **kwargs):
         if value == 0 and old_value == 1:
-            self.update_pilatus_image()
+            self.image_update_requested.emit()
         #     print('acquiring')
         # print('done')
         # self.update_pilatus_image()
@@ -462,6 +456,7 @@ class UIPilatusMonitor(*uic.loadUiType(ui_path)):
         #     #     self.update_pilatus_image()
 
     def addCanvas(self):
+        self._image_artist = None
         self.figure_pilatus_image = Figure()
         self.figure_pilatus_image.set_facecolor(color='#FcF9F6')
         self.canvas_pilatus_image = FigureCanvas(self.figure_pilatus_image)
@@ -472,7 +467,7 @@ class UIPilatusMonitor(*uic.loadUiType(ui_path)):
         self.canvas_pilatus_image.draw_idle()
         self.figure_pilatus_image.tight_layout()
 
-        cursor = Cursor(self.figure_pilatus_image.ax, useblit=True, color='green', linewidth=0.75)
+        self._cursor = Cursor(self.figure_pilatus_image.ax, useblit=True, color='green', linewidth=0.75)
 
         self.cid_start = self.canvas_pilatus_image.mpl_connect('button_press_event', self.roi_mouse_click_start)
         self.cid_move = self.canvas_pilatus_image.mpl_connect('motion_notify_event', self.roi_mouse_click_move)

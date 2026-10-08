@@ -1,4 +1,4 @@
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtCore import QThread, QSettings
 from PyQt5.Qt import  QObject
@@ -24,7 +24,7 @@ from PyQt5.QtCore import Qt
 # from isstools.dialogs.UpdateMotorLimit import UIUpdateMotorLimit
 #
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_motor_widget_compact.ui')
+ui_path = resource_path('ui/ui_motor_widget_compact.ui')
 
 
 

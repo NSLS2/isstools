@@ -3,7 +3,7 @@ import time as ttime
 import bluesky.plan_stubs as bps
 
 import numpy as np
-import pkg_resources
+from isstools.resources import resource_path
 
 from PyQt5 import uic,  QtCore
 from matplotlib.backends.backend_qt5agg import (
@@ -25,7 +25,7 @@ from isstools.elements.roi_widget import ROIWidget
 from isstools.widgets import widget_energy_selector_with_periodic_table
 
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_xia_manager.ui')
+ui_path = resource_path('ui/ui_xia_manager.ui')
 
 
 class UIXIAManager(*uic.loadUiType(ui_path)):
@@ -349,7 +349,7 @@ class UIXIAManager(*uic.loadUiType(ui_path)):
             self.figure_mca.tight_layout()
             if not self.plot_will_reset:
                 self.figure_mca.ax.set_xlim(xlim)
-            self.figure_mca.canvas.draw()
+            self.figure_mca.canvas.draw_idle()
 
 
 '''

@@ -1,8 +1,8 @@
 from PyQt5 import uic, QtGui, QtCore
-import pkg_resources
+from isstools.resources import resource_path
 
-ui_path_sample = pkg_resources.resource_filename('isstools', 'dialogs/UpdateSampleInfo.ui')
-ui_path_sample_point = pkg_resources.resource_filename('isstools', 'dialogs/UpdateSamplePointInfo.ui')
+ui_path_sample = resource_path('dialogs/UpdateSampleInfo.ui')
+ui_path_sample_point = resource_path('dialogs/UpdateSamplePointInfo.ui')
 
 class UpdateSampleInfo(*uic.loadUiType(ui_path_sample)):
 

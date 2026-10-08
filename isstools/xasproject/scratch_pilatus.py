@@ -1,4 +1,4 @@
-import pkg_resources
+from isstools.resources import resource_path
 from PyQt5 import uic, QtCore
 from matplotlib.widgets import RectangleSelector, Cursor
 from PyQt5.Qt import QSplashScreen, QObject
@@ -17,9 +17,9 @@ import time as ttime
 
 from isstools.elements.figure_update import update_figure
 
-ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_pilatus.ui')
-spectrometer_image1 = pkg_resources.resource_filename('isstools', 'Resources/spec_image1.png')
-spectrometer_image2 = pkg_resources.resource_filename('isstools', 'Resources/spec_image2.png')
+ui_path = resource_path('ui/ui_pilatus.ui')
+spectrometer_image1 = resource_path('Resources/spec_image1.png')
+spectrometer_image2 = resource_path('Resources/spec_image2.png')
 
 class UIPilatusMonitor(*uic.loadUiType(ui_path)):
     def __init__(self,
@@ -99,7 +99,6 @@ class UIPilatusMonitor(*uic.loadUiType(ui_path)):
 
         self.RS = RectangleSelector(self.figure_pilatus_image.ax,
                                                     self.line_select_callback,
-                                                    drawtype='box',
                                                     useblit=True,
                                                     button=[1, 3],
                                                     minspanx=5,
