@@ -79,7 +79,7 @@ class UIProcessing(*uic.loadUiType(ui_path)):
         '''
             hhm:
                 the monochromator
-            tiled_client: the ISS raw runs catalog
+            tiled_client: the ISS migration runs catalog
             det_dict:
                 detector dictionary
             parent_gui:
