@@ -20,7 +20,7 @@ from redis_json_dict import RedisJSONDict
 
 class UIJohannTools(*uic.loadUiType(ui_path)):
     def __init__(self, parent=None,
-                 db=None,
+                 tiled_client=None,
                  RE=None,
                  plan_processor=None,
                  hhm=None,
@@ -45,7 +45,7 @@ class UIJohannTools(*uic.loadUiType(ui_path)):
         self.service_plan_funcs = service_plan_funcs
         self.RE = RE
         self.plan_processor = plan_processor
-        self.db = db
+        self.tiled_client = tiled_client
 
         self.hhm=hhm
         self.johann_emission = johann_emission
@@ -295,7 +295,7 @@ class UIJohannTools(*uic.loadUiType(ui_path)):
 
     def analyze_resolution_scan(self, uids):
         uid = uids[0]
-        Ecen, fwhm, I_cor, I_fit, I_fit_raw, E = analyze_elastic_scan(self.db, uid)
+        Ecen, fwhm, I_cor, I_fit, I_fit_raw, E = analyze_elastic_scan(self.tiled_client.v2.v1, uid)
         print(f'Peak width: {fwhm}\n Estimated resolution: {np.sqrt(fwhm**2 - (1.3e-4 * Ecen)**2)}')
         data_dict = {}
         for k in self.align_motor_dict.keys():
@@ -471,7 +471,7 @@ class UIJohannTools(*uic.loadUiType(ui_path)):
 
         uids = np.arange(-energies.size, 0)
 
-        energy_converter, energies_act, resolutions, I_fit_raws = analyze_many_elastic_scans(self.db, uids, energies, short_output=False)
+        energy_converter, energies_act, resolutions, I_fit_raws = analyze_many_elastic_scans(self.tiled_client.v2.v1, uids, energies, short_output=False)
         # self.johann_emission.append_energy_converter(energy_converter)
         self.johann_emission.set_spectrometer_calibration(energies, energies_act)
 
@@ -516,8 +516,6 @@ class UIJohannTools(*uic.loadUiType(ui_path)):
         energy_converter = Nominal2ActualConverter(energies_nom, energies_act)
         self.johann_emission.append_energy_converter(energy_converter)
         print('Successfully loaded the spectrometer calibration')
-
-
 
 
 

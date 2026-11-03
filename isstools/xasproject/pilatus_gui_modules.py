@@ -10,9 +10,6 @@
 from ophyd import EpicsMotor as _EpicsMotor
 from ophyd import Component as Cpt, Device, EpicsSignalRO, Kind
 
-from databroker import Broker
-db = Broker.named("iss")
-
 from ophyd import (ProsilicaDetector, SingleTrigger, Component as Cpt, Device,
                    EpicsSignal, EpicsSignalRO, ImagePlugin, StatsPlugin, ROIPlugin,
                    DeviceStatus, Signal)
@@ -522,10 +519,6 @@ class APBTriggerFileHandler(HandlerBase):
 
 
 
-db.reg.register_handler('APB_TRIGGER',
-                        APBTriggerFileHandler, overwrite=True)
-
-
 class PilatusDetectorCamV33(PilatusDetectorCam):
     '''This is used to update the Pilatus to AD33.'''
 
@@ -994,5 +987,4 @@ from databroker.assets.handlers import HandlerBase, PilatusCBFHandler, AreaDetec
 # from xas.handlers import ISSPilatusHDF5Handler
 # db.reg.register_handler('PIL100k_HDF5',
 #                          ISSPilatusHDF5Handler, overwrite=True)
-
 

@@ -29,7 +29,6 @@ USER_PATH = 'processed'
 class UIInfoGeneral(*uic.loadUiType(ui_path)):
     def __init__(self,
                  RE = None,
-                 db = None,
                  parent = None,
                  cloud_dispatcher = None,
                  manager_dict = None,
@@ -48,7 +47,6 @@ class UIInfoGeneral(*uic.loadUiType(ui_path)):
         self.timer_update_weather.setInterval(1000*60*5)
         self.timer_update_weather.timeout.connect(self.update_weather)
         self.timer_update_weather.start()
-        self.db = db
         self.parent = parent
         self.cloud_dispatcher = cloud_dispatcher
         self.RE = RE
@@ -254,7 +252,6 @@ class UIInfoGeneral(*uic.loadUiType(ui_path)):
     #         for file in list_files_to_send:
     #             print(file)
     #             #self.cloud_dispatcher.load_to_dropbox(file)
-
 
 
 

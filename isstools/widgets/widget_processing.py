@@ -16,7 +16,7 @@ from PyQt5.QtGui import QColor
 from PyQt5.Qt import Qt
 
 # External packages (scientific/data handling)
-from databroker.queries import TimeRange, Key
+from isstools.tiled_access import search_proposal_runs
 
 
 ui_path = pkg_resources.resource_filename('isstools', 'ui/ui_processing.ui')
@@ -72,14 +72,14 @@ class ProposalWorker(QObject):
 class UIProcessing(*uic.loadUiType(ui_path)):
     def __init__(self,
                  hhm,
-                 db,
+                 tiled_client,
                  parent_gui,
                  redis_settings_client=None,
                  *args, **kwargs):
         '''
             hhm:
                 the monochromator
-            db : the data database
+            tiled_client: the ISS raw runs catalog
             det_dict:
                 detector dictionary
             parent_gui:
@@ -90,7 +90,7 @@ class UIProcessing(*uic.loadUiType(ui_path)):
         self.setupUi(self)
         self.parent_gui = parent_gui
         self.hhm = hhm
-        self.db = db
+        self.tiled_catalog = tiled_client
         self.redis_settings_client = redis_settings_client
 
         self.settings = parent_gui.settings
@@ -120,7 +120,6 @@ class UIProcessing(*uic.loadUiType(ui_path)):
                           '2':['05','01','08','31'],
                           '3':['09','01','12','31'],}
 
-        self.tiled_catalog = None
         self.current_catalog = None
 
     def copy_selected_uids_to_clipboard(self, QPos):
@@ -206,12 +205,7 @@ class UIProcessing(*uic.loadUiType(ui_path)):
 
     def populate_uids(self):
         if self.tiled_catalog is None:
-            print('You need to connect to Tiled')
-            print('Execute the following commands\n')
-            print('from tiled.client import from_uri')
-            print('tiled_catalog = from_uri("https://tiled.nsls2.bnl.gov")["iss"]["raw"]\n')
-            print('and then...\n')
-            print('xlive_gui.widget_processing.tiled_catalog = tiled_catalog\n')
+            print('No Tiled catalog configured')
             return
 
         self.processed_uid_list = []
@@ -245,26 +239,17 @@ class UIProcessing(*uic.loadUiType(ui_path)):
         print(f"Loaded {len(log_data)} entries into list")
 
 
-        start_date = f"{self.year}-{self.cycle_def[self.cycle][0]}-{self.cycle_def[self.cycle][1]}"
-        end_date   = f"{self.year}-{self.cycle_def[self.cycle][2]}-{self.cycle_def[self.cycle][3]}"
-
-        date_limited_c = self.tiled_catalog.search(TimeRange(since=start_date, until=end_date))
-
-        self.current_catalog = date_limited_c.search(Key("proposal") == self.proposal)
+        self.current_catalog = search_proposal_runs(self.tiled_catalog, self.year, self.cycle, self.proposal)
         self.acquired_uid_list = list(self.current_catalog)
 
-        self.not_processed_uid_list = [uid for uid in self.acquired_uid_list if
-                                       uid not in self.processed_uid_list]
-
-
-
-
+        self.not_processed_uid_list = []
         for uid in self.acquired_uid_list:
-            hdr = self.db[uid]['start']
-            if 'experiment' in hdr.keys():
+            hdr = self.current_catalog[uid].metadata['start']
+            if 'experiment' in hdr and 'interp_filename' in hdr:
                 name = os.path.splitext(os.path.basename(hdr['interp_filename']))[0]
                 item = QListWidgetItem(f'{uid} - {name}')
-                if uid in self.not_processed_uid_list:
+                if uid not in self.processed_uid_list:
+                    self.not_processed_uid_list.append(uid)
                     item.setForeground(QColor(255, 0, 0))  # Red text for unprocessed
                 self.listWidget_acquired_uids.addItem(item)
 
@@ -275,7 +260,10 @@ class UIProcessing(*uic.loadUiType(ui_path)):
             selected_items = self.listWidget_acquired_uids.selectedItems()
             list_to_process = [item.text().split(' -')[0] for item in selected_items]
         for uid in list_to_process:
-            self.parent_gui.processing_thread.add_doc(self.db[uid]['stop'])
-
-
-
+            run = self.tiled_catalog[uid]
+            run.refresh()
+            stop = run.metadata.get('stop')
+            if stop:
+                self.parent_gui.processing_thread.add_doc(stop)
+            else:
+                print(f'Skipping unfinished run {uid}')

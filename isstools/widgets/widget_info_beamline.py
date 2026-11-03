@@ -36,7 +36,6 @@ class UIInfoBeamline(*uic.loadUiType(ui_path)):
                  apb=None,
                  RE = None,
                  plan_processor=None,
-                 db = None,
                  foil_camera=None,
                  attenuator_camera=None,
                  encoder_pb=None,
@@ -60,7 +59,6 @@ class UIInfoBeamline(*uic.loadUiType(ui_path)):
         self.RE = RE
         self.plan_processor = plan_processor
         self.inclinometers = inclinometers
-        self.db = db
         self.shutters = shutters
         self.ic_amplifiers = ic_amplifiers
         self.parent = parent
@@ -414,7 +412,6 @@ class UIInfoBeamline(*uic.loadUiType(ui_path)):
         #
         #
         #
-
 
 
 

@@ -33,6 +33,7 @@ from isscloudtools.initialize import get_dropbox_service, get_gmail_service, get
 from isscloudtools.gmail import create_html_message, upload_draft, send_draft
 import time as ttime
 from xas.process import process_interpolate_bin
+from .tiled_access import wait_for_completed_run
 from isstools.dialogs.BasicDialogs import question_message_box, error_message_box, message_box
 from PyQt5.QtCore import QThread, pyqtSignal
 from queue import Queue, Empty
@@ -72,7 +73,7 @@ class XliveGui(*uic.loadUiType(ui_path)):
                  user_manager=None,
                  plan_processor=None,
                  RE=None,
-                 db=None,
+                 tiled_client=None,
                  processing_ioc_uid=None,
                  accelerator=None,
                  front_end=None,
@@ -107,7 +108,7 @@ class XliveGui(*uic.loadUiType(ui_path)):
         self.setupUi(self)
 
         self.RE = RE
-        self.db = db
+        self.tiled_client = tiled_client
         self.apb = apb
         self.hhm = hhm
         self.hhm_encoder = hhm_encoder
@@ -216,7 +217,7 @@ class XliveGui(*uic.loadUiType(ui_path)):
 
         print('widget processing loading', ttime.ctime())
         self.widget_processing = widget_processing.UIProcessing(hhm,
-                                                                db,
+                                                                tiled_client,
                                                                 parent_gui=self,
                                                                 redis_settings_client=redis_settings_client,
                                                                 )
@@ -271,7 +272,6 @@ class XliveGui(*uic.loadUiType(ui_path)):
                                                                            apb,
                                                                            apb_trigger_xs,
                                                                            apb_trigger_pil100k,
-                                                                           db,
                                                                            detector_dict,
                                                                            ic_amplifiers,
                                                                            {}, # plan funcs
@@ -293,7 +293,6 @@ class XliveGui(*uic.loadUiType(ui_path)):
         #Info general
         print('widget info general loading', ttime.ctime())
         self.widget_info_general = widget_info_general.UIInfoGeneral(RE=RE,
-                                                                     db=db,
                                                                      parent=self,
                                                                      manager_dict=self.manager_dict
                                                                      )
@@ -313,7 +312,6 @@ class XliveGui(*uic.loadUiType(ui_path)):
                                                                         apb=apb,
                                                                         RE=RE,
                                                                         plan_processor=plan_processor,
-                                                                        db=None,
                                                                         foil_camera=detector_dict['Camera SP5']['device'],
                                                                         attenuator_camera=detector_dict['Camera SP6']['device'],
                                                                         encoder_pb = self.hhm_encoder,
@@ -347,7 +345,6 @@ class XliveGui(*uic.loadUiType(ui_path)):
                                                                             hhm,
                                                                             trajectory_manager,
                                                                             RE,
-                                                                            # db,
                                                                             sample_stage,
                                                                             self,
                                                                             service_plan_funcs,
@@ -360,7 +357,6 @@ class XliveGui(*uic.loadUiType(ui_path)):
         self.widget_spectrometer = widget_spectrometer.UISpectrometer(RE,
                                                                       plan_processor,
                                                                       hhm,
-                                                                      db,
                                                                       johann_emission,
                                                                       johann_spectrometer_manager,
                                                                       detector_dict,
@@ -401,7 +397,7 @@ class XliveGui(*uic.loadUiType(ui_path)):
         self.push_re_abort.clicked.connect(self.re_abort)
         self.cloud_dispatcher = CloudDispatcher(dropbox_service=self.dropbox_service,slack_service=self.slack_client_bot)
         print(' Cloud dispatcher initialization is complete`q', ttime.ctime())
-        pc = ScanProcessingCallback(db=self.db, draw_func_interp=self.widget_run.draw_interpolated_data,
+        pc = ScanProcessingCallback(draw_func_interp=self.widget_run.draw_interpolated_data,
                                     draw_func_bin=None,
                                     cloud_dispatcher=self.cloud_dispatcher, thread=self.processing_thread, print_func=print_to_gui)
 
@@ -567,7 +563,6 @@ class XliveGui(*uic.loadUiType(ui_path)):
 #                 else:
 #                     self.print(f' File received 1 {uid}')
 #                     process_interpolate_bin(self.doc,
-#                                             self.gui.db,
 #                                             draw_func_interp=self.gui.widget_run.draw_data,
 #                                             draw_func_bin=None,
 #                                             cloud_dispatcher=self.gui.cloud_dispatcher,
@@ -703,14 +698,15 @@ class ProcessingThread(QThread):
 
                 uid = doc['run_start']
                 self.processing_event.emit("started", uid, self.queue.qsize()+1)
-                start_doc = self.gui.db[uid]['start']
+                run = wait_for_completed_run(self.gui.tiled_client, uid)
+                start_doc = run.metadata['start']
                 if self.processing_ioc_uid:
                     self.processing_ioc_uid.put(doc)
                 else:
                     self.print(f'File received: {uid}')
                     process_interpolate_bin(
                         doc,
-                        self.gui.db,
+                        self.gui.tiled_client.v2.v1,
                         draw_func_interp=self.gui.widget_run.draw_interpolated_data,
                         draw_func_bin=None,
                         cloud_dispatcher=self.gui.cloud_dispatcher,
@@ -733,9 +729,4 @@ class ProcessingThread(QThread):
                     self.print(f'{ttime.ctime()} Exception occurred:\n{error_msg}')
                 else:
                     raise
-
-
-
-
-
 

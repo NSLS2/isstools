@@ -40,7 +40,6 @@ class UISpectrometer(*uic.loadUiType(ui_path)):
                  RE,
                  plan_processor,
                  hhm,
-                 db,
                  johann_emission,
                  johann_spectrometer_manager,
                  detector_dictionary,
@@ -82,7 +81,7 @@ class UISpectrometer(*uic.loadUiType(ui_path)):
         # Legacy Johann
         # self.widget_johann_tools = widget_johann_tools.UIJohannTools(parent=self,
         #                                                              motor_dictionary=motor_dictionary,
-        #                                                              db=db,
+        #                                                              tiled_client=parent.tiled_client,
         #                                                              RE=RE,
         #                                                              plan_processor=plan_processor,
         #                                                              hhm=hhm,
@@ -1306,8 +1305,6 @@ class UISpectrometer(*uic.loadUiType(ui_path)):
     #
     #     # self.update_johann_alignment_data(ecen, fwhm)
     #     # self.plot_johann_alignment_data(purpose='alignment')
-
-
 
 
 
