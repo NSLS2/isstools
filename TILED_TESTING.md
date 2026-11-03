@@ -21,6 +21,9 @@ with the same authenticated context, and passes its v2/v1 interface to the
 existing analysis functions. Tiled handles external assets on the server; migration runs use the
 MIME-type and resource/datum patches in `startup/02-tiled-writer.py`. The
 RunEngine subscribes one TiledWriter to the shared migration writing client.
+For new runs, XLive waits for the persisted Stop using a WebSocket subscription
+to the migration catalog, then validates and processes the run. Confirm Tiled
+streaming is enabled and that the GUI user's session can subscribe to it.
 For each completed experimental run, processing validates and repairs external
 data-source shapes using the authenticated GUI client before reading. Verify
 that the logged-in user is authorized for the Tiled validation endpoint; it

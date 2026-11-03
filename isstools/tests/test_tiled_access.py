@@ -1,5 +1,6 @@
 from datetime import datetime
 import sys
+from threading import Event
 from types import ModuleType, SimpleNamespace
 from unittest.mock import Mock
 
@@ -12,9 +13,11 @@ from isstools.tiled_access import search_proposal_runs, wait_for_completed_run
 
 
 class Catalog:
-    def __init__(self, runs=()):
+    def __init__(self, runs=(), subscription=None):
         self.runs = list(runs)
         self.queries = []
+        self.subscription = subscription
+        self.subscribed = False
 
     def __getitem__(self, uid):
         result = self.runs.pop(0)
@@ -26,6 +29,10 @@ class Catalog:
         self.queries.append(query)
         return self
 
+    def subscribe(self):
+        self.subscribed = True
+        return self.subscription
+
 
 class Run:
     def __init__(self, stop):
@@ -36,19 +43,146 @@ class Run:
         self.refreshes += 1
 
 
-def test_wait_for_creation_and_persisted_stop():
-    pending = Run(None)
+class CallbackRegistry:
+    def add_callback(self, callback):
+        self.callback = callback
+
+
+class Subscription:
+    def __init__(self, action=None):
+        self.child_created = CallbackRegistry()
+        self.child_metadata_updated = CallbackRegistry()
+        self.stream_closed = CallbackRegistry()
+        self.action = action
+        self.disconnected = Event()
+        self.starts = []
+
+    def start(self, start=None):
+        self.starts.append(start)
+        self._connected_event.set()
+        if self.action:
+            self.action(self)
+        self.disconnected.wait(2)
+
+    def disconnect(self, wait=True):
+        assert wait is False
+        self.disconnected.set()
+
+    def emit(self, key='abc', stop=True, created=False):
+        registry = self.child_created if created else self.child_metadata_updated
+        registry.callback(SimpleNamespace(key=key, metadata={'stop': {'run_start': key}} if stop else {}))
+
+
+def test_completed_run_does_not_subscribe():
     completed = Run({'run_start': 'abc'})
-    catalog = Catalog([KeyError('abc'), pending, completed])
-    assert wait_for_completed_run(catalog, 'abc', timeout=1, poll_interval=0) is completed
-    assert pending.refreshes == completed.refreshes == 1
+    catalog = Catalog([completed])
+    assert wait_for_completed_run(catalog, 'abc') is completed
+    assert not catalog.subscribed
 
 
-def test_wait_timeout_and_unrelated_errors():
+@pytest.mark.parametrize('initial', [KeyError('abc'), Run(None)])
+def test_waits_for_matching_stop_notification(initial):
+    completed = Run({'run_start': 'abc'})
+    subscription = Subscription(lambda sub: (
+        sub.emit(key='other'), sub.emit(stop=False, created=True), sub.emit(stop=False), sub.emit()
+    ))
+    catalog = Catalog([initial, KeyError('abc'), completed], subscription)
+    assert wait_for_completed_run(catalog, 'abc', timeout=1) is completed
+    assert subscription.starts == [None]
+    assert subscription.disconnected.wait(1)
+
+
+def test_run_finishes_during_connection():
+    completed = Run({'run_start': 'abc'})
+    subscription = Subscription()
+    catalog = Catalog([KeyError('abc'), completed], subscription)
+    assert wait_for_completed_run(catalog, 'abc', timeout=1) is completed
+    assert subscription.disconnected.wait(1)
+
+
+def test_run_created_already_complete():
+    completed = Run({'run_start': 'abc'})
+    subscription = Subscription(lambda sub: sub.emit(created=True))
+    catalog = Catalog([KeyError('abc'), KeyError('abc'), completed], subscription)
+    assert wait_for_completed_run(catalog, 'abc', timeout=1) is completed
+
+
+def test_unrelated_notifications_timeout():
+    subscription = Subscription(lambda sub: (sub.emit(key='other'), sub.emit(stop=False)))
+    catalog = Catalog([KeyError('abc'), KeyError('abc')], subscription)
     with pytest.raises(TimeoutError, match='abc'):
-        wait_for_completed_run(Catalog([KeyError('abc')]), 'abc', timeout=0)
-    with pytest.raises(PermissionError):
-        wait_for_completed_run(Catalog([PermissionError('denied')]), 'abc', timeout=0)
+        wait_for_completed_run(catalog, 'abc', timeout=0.05)
+    assert subscription.disconnected.wait(1)
+
+
+def test_websocket_connection_error():
+    def fail(subscription):
+        raise PermissionError('websocket denied')
+    subscription = Subscription(fail)
+    catalog = Catalog([KeyError('abc'), KeyError('abc')], subscription)
+    with pytest.raises(PermissionError, match='websocket denied'):
+        wait_for_completed_run(catalog, 'abc', timeout=1)
+    assert subscription.disconnected.wait(1)
+
+
+def test_timeout_when_connection_never_finishes():
+    class StalledSubscription(Subscription):
+        def start(self, start=None):
+            self.disconnected.wait(2)
+    subscription = StalledSubscription()
+    catalog = Catalog([KeyError('abc'), KeyError('abc')], subscription)
+    with pytest.raises(TimeoutError, match='abc'):
+        wait_for_completed_run(catalog, 'abc', timeout=0.05)
+    assert subscription.disconnected.wait(1)
+
+
+def test_timeout_does_not_wait_for_blocked_disconnect():
+    release = Event()
+    entered = Event()
+
+    class BlockingSubscription(Subscription):
+        def start(self, start=None):
+            release.wait(2)
+
+        def disconnect(self, wait=True):
+            entered.set()
+            release.wait(2)
+            super().disconnect(wait=wait)
+
+    subscription = BlockingSubscription()
+    catalog = Catalog([KeyError('abc'), KeyError('abc')], subscription)
+    try:
+        with pytest.raises(TimeoutError, match='abc'):
+            wait_for_completed_run(catalog, 'abc', timeout=0.05)
+        assert entered.wait(1)
+        assert not subscription.disconnected.is_set()
+    finally:
+        release.set()
+    assert subscription.disconnected.wait(1)
+
+
+def test_lookup_failure_disconnects():
+    subscription = Subscription()
+    catalog = Catalog([KeyError('abc'), PermissionError('read denied')], subscription)
+    with pytest.raises(PermissionError, match='read denied'):
+        wait_for_completed_run(catalog, 'abc')
+    assert subscription.disconnected.wait(1)
+
+
+def test_stream_close_reports_failure():
+    subscription = Subscription(lambda sub: sub.stream_closed.callback(sub))
+    catalog = Catalog([KeyError('abc'), KeyError('abc')], subscription)
+    with pytest.raises(RuntimeError, match='subscription closed'):
+        wait_for_completed_run(catalog, 'abc', timeout=1)
+    assert subscription.disconnected.wait(1)
+
+
+def test_missing_stop_after_notification_fails():
+    subscription = Subscription(lambda sub: sub.emit())
+    catalog = Catalog([KeyError('abc'), KeyError('abc'), Run(None)], subscription)
+    with pytest.raises(RuntimeError, match='no persisted stop'):
+        wait_for_completed_run(catalog, 'abc', timeout=1)
+    assert subscription.disconnected.wait(1)
 
 
 @pytest.mark.parametrize('cycle,start,end', [
