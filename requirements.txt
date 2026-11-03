@@ -2,3 +2,4 @@ numexpr
 pyzbar
 slackclient
 tiled
+bluesky-tiled-plugins

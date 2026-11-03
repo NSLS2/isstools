@@ -4,6 +4,7 @@ Run the focused tests in the beamline Python environment:
 
 ```bash
 python -m pytest -q isstools/tests/test_tiled_access.py
+python -m unittest -v isstools.tests.test_tiled_validation_integration
 python -m pytest -q ../issxas/xas/tests/test_tiled_db_io.py
 ```
 
@@ -15,11 +16,15 @@ step scan, an APB fly scan, an EPICS fly scan, and runs with each applicable
 Pilatus, Xspress and Ge detector; test Pilatus image loading if used.
 
 The GUI's authenticated client is `xlive_tiled_client`, already scoped to
-`iss/migration`. The existing ISS processing and Johann analysis functions require
-the Databroker v1 interface and use `xlive_tiled_client.v2.v1` at that
-boundary. Tiled handles external assets on the server; migration runs use the
+`iss/migration`. ISS processing uses an independent plugin-dispatch catalog
+with the same authenticated context, and passes its v2/v1 interface to the
+existing analysis functions. Tiled handles external assets on the server; migration runs use the
 MIME-type and resource/datum patches in `startup/02-tiled-writer.py`. The
 RunEngine subscribes one TiledWriter to the shared migration writing client.
+For each completed experimental run, processing validates and repairs external
+data-source shapes using the authenticated GUI client before reading. Verify
+that the logged-in user is authorized for the Tiled validation endpoint; it
+requires `read:data`, `read:metadata`, and `write:metadata` on the run.
 Test historical XIA_XMAP_HDF5 and XSP3X runs separately to check their migration
 and server-side adapter coverage.
 

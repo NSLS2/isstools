@@ -33,7 +33,7 @@ from isscloudtools.initialize import get_dropbox_service, get_gmail_service, get
 from isscloudtools.gmail import create_html_message, upload_draft, send_draft
 import time as ttime
 from xas.process import process_interpolate_bin
-from .tiled_access import wait_for_completed_run
+from .tiled_access import prepare_run_for_processing
 from isstools.dialogs.BasicDialogs import question_message_box, error_message_box, message_box
 from PyQt5.QtCore import QThread, pyqtSignal
 from queue import Queue, Empty
@@ -698,7 +698,7 @@ class ProcessingThread(QThread):
 
                 uid = doc['run_start']
                 self.processing_event.emit("started", uid, self.queue.qsize()+1)
-                run = wait_for_completed_run(self.gui.tiled_client, uid)
+                run, processing_runs = prepare_run_for_processing(self.gui.tiled_client, uid)
                 start_doc = run.metadata['start']
                 if self.processing_ioc_uid:
                     self.processing_ioc_uid.put(doc)
@@ -706,7 +706,7 @@ class ProcessingThread(QThread):
                     self.print(f'File received: {uid}')
                     process_interpolate_bin(
                         doc,
-                        self.gui.tiled_client.v2.v1,
+                        processing_runs,
                         draw_func_interp=self.gui.widget_run.draw_interpolated_data,
                         draw_func_bin=None,
                         cloud_dispatcher=self.gui.cloud_dispatcher,
@@ -729,4 +729,3 @@ class ProcessingThread(QThread):
                     self.print(f'{ttime.ctime()} Exception occurred:\n{error_msg}')
                 else:
                     raise
-

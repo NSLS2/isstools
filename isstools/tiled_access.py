@@ -39,3 +39,32 @@ def wait_for_completed_run(catalog, uid, timeout=120, poll_interval=0.5):
         if remaining <= 0:
             raise TimeoutError(f'Timed out waiting for Tiled run {uid} to finish')
         time.sleep(min(poll_interval, remaining))
+
+
+def processing_catalog(catalog):
+    """Use plugin SQL clients without changing the GUI's shared dispatch map."""
+    from bluesky_tiled_plugins.clients.bluesky_event_stream import BlueskyEventStream
+    from bluesky_tiled_plugins.clients.bluesky_run import BlueskyRun
+    from bluesky_tiled_plugins.clients.catalog_of_bluesky_runs import CatalogOfBlueskyRuns
+    from tiled.utils import OneShotCachedMap
+
+    dispatch = OneShotCachedMap({
+        key: lambda key=key: catalog.structure_clients[key]
+        for key in catalog.structure_clients
+    })
+    dispatch.set('BlueskyRun', lambda: BlueskyRun)
+    dispatch.set('BlueskyEventStream', lambda: BlueskyEventStream)
+    return CatalogOfBlueskyRuns(catalog.context, item=catalog.item, structure_clients=dispatch)
+
+
+def prepare_run_for_processing(catalog, uid, timeout=120, poll_interval=0.5):
+    """Wait for ingestion, validate external assets, and build a fresh legacy view."""
+    catalog = processing_catalog(catalog)
+    run = wait_for_completed_run(catalog, uid, timeout=timeout, poll_interval=poll_interval)
+    if 'experiment' in run.metadata['start']:
+        if not run.validate(raise_on_error=True):
+            raise RuntimeError(f'Tiled validation failed for run {uid}')
+        # Validation may change shapes on the server. Discard inlined child
+        # metadata before constructing the v2/v1 processing view.
+        catalog.refresh()
+    return run, catalog.v2.v1
