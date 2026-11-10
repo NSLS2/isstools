@@ -704,13 +704,17 @@ class ProcessingThread(QThread):
                     self.processing_ioc_uid.put(doc)
                 else:
                     self.print(f'File received: {uid}')
+                    # Resolve the legacy-compatible header once. xas needs it
+                    # for lazy stream reads, but should not fetch run metadata twice.
+                    hdr = processing_runs[uid]
                     process_interpolate_bin(
                         doc,
                         processing_runs,
                         draw_func_interp=self.gui.widget_run.draw_interpolated_data,
                         draw_func_bin=None,
                         cloud_dispatcher=self.gui.cloud_dispatcher,
-                        print_func=self.print
+                        print_func=self.print,
+                        hdr=hdr,
                     )
                 self._write_uid_to_file(start_doc)
                 queue_size_after = self.queue.qsize()
